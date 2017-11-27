@@ -3,7 +3,7 @@ import Store from "electron-store";
 const store = new Store();
 
 export default function PlayerControlLink(scope, element) {
-    var player = scope.player;
+    var player = scope.player, animateScroll, timer;
 
     scope.clientSeek = function (e) {
         e.stopPropagation();
@@ -15,6 +15,17 @@ export default function PlayerControlLink(scope, element) {
             var r = (e.clientX - target[0].offsetParent.offsetLeft) / target[0].clientWidth;
             player.seek(r * player.nowPlaying.duration());
         }
+    }
+
+    animateScroll = function (now, goal, who) {
+        var dist, next;
+        if (Math.round(now) === goal) return;
+        dist = goal - now;
+        next = now + 0.25 * dist;
+        who.scrollTop = next;
+        timer = setTimeout(function () {
+            animateScroll(next, goal, who);
+        }, 10);
     }
 
     scope.$watch('player.focusedItem', function(nv, ov) {
@@ -33,10 +44,12 @@ export default function PlayerControlLink(scope, element) {
         plTop = pl.getBoundingClientRect().top;
         if (bottom > winHeight) {
             scrollTo = bottom - plTop + pl.scrollTop + el.offsetHeight - pl.offsetHeight;
-            pl.scrollTop = scrollTo;
         } else if (top < plTop) {
             scrollTo = top + pl.scrollTop - plTop;
-            pl.scrollTop = scrollTo;
+        }
+        if (scrollTo !== undefined) {
+            clearTimeout(timer);
+            animateScroll(pl.scrollTop, scrollTo, pl);
         }
     });
 
