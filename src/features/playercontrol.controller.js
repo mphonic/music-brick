@@ -1,15 +1,8 @@
 import Store from "electron-store";
 import angular from "angular";
+import arrToBase64 from "../helpers/arrToBase64.js";
 
 const store = new Store();
-
-function arrToBase64(arr) {
-    var buf = new Uint8Array(arr);
-    var binstr = Array.prototype.map.call(buf, function (ch) {
-        return String.fromCharCode(ch);
-    }).join('');
-    return btoa(binstr);
-}
 
 export default function PlayerControl($scope, PlaylistDialog) {
     var player = $scope.player;

@@ -1,4 +1,5 @@
 import howler from "howler";
+import arrToBase64 from "../helpers/arrToBase64.js";
 
 export default function Player($interval) {
 
