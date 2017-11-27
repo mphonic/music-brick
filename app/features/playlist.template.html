@@ -45,8 +45,7 @@
                             'playlist-cued': $index === player.focusedItem 
                         }" 
                         ng-click="pc.setFocusedItem($index, $event)"
-                        ng-dblclick="player.play($index)" 
-                        id="playlist-{{ $index }}">
+                        ng-dblclick="player.play($index)">
                         <span class="progress-container" 
                             ng-click="clientSeek($event)" 
                             ng-show="player.currentIndex === $index && player.nowPlaying">

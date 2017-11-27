@@ -18,7 +18,7 @@ export default function PlayerControlLink(scope, element) {
     }
 
     scope.$watch('player.focusedItem', function(nv, ov) {
-        var el = document.getElementById('playlist-' + nv),
+        var el = document.querySelectorAll('#playlist li')[player.focusedItem],
             top,
             bottom,
             winHeight,

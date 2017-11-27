@@ -143,13 +143,14 @@ img {
   flex: 1 1 auto;
   overflow: auto;
 }
+
 ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-li, 
+#playlist li, 
 #playlist-labels {
   position: relative;
   width: 100%;
@@ -158,16 +159,16 @@ li,
   border-left: 2px solid var(--playlist-bg);
 }
 
-li {
+#playlist li {
   color: var(--playlist-font-color);
   cursor: pointer;
 }
 
-li:hover {
-  background: #222;
+#playlist li:hover {
+  background: var(--playlist-hover-bg);
 }
 
-li:after {
+#playlist li:after {
   content:'';
   display: table;
   clear: both;
@@ -195,13 +196,13 @@ li:after {
     box-shadow: 0px 0px 2px 2px #000000;
 }
 
-.playlist-playing,
-.playlist-playing.playlist-cued {
+#playlist .playlist-playing,
+#playlist .playlist-playing.playlist-cued {
   background: var(--playlist-playing-bg);
   border-left: 2px solid var(--progress-bar-color);
 }
 
-.playlist-cued {
+#playlist .playlist-cued {
   background: var(--playlist-cued-bg);
   border-left: 2px solid var(--playlist-cued-border-color);
 }
