@@ -2,12 +2,12 @@ import Store from "electron-store";
 
 const store = new Store();
 
-export default function PlaylistLink(scope, element) {
+export default function PlayerControlLink(scope, element) {
     var player = scope.player;
 
     scope.clientSeek = function (e) {
         e.stopPropagation();
-        if (this.nowPlaying) {
+        if (player.nowPlaying) {
             var target = angular.element(e.target);
             if (target.attr('class').match(/bar/)) {
                 target = target.parent();

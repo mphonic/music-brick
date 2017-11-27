@@ -14,20 +14,20 @@ const app = remote.app;
 const appDir = jetpack.cwd(app.getAppPath());
 
 import Player from "./features/player.controller.js";
-import PlaylistController from "./features/playlist.controller.js";
-import PlaylistLink from "./features/playlist.link.js";
+import PlayerControl from "./features/playercontrol.controller.js";
+import PlayerControlLink from "./features/playercontrol.link.js";
 
 export default angular.module('audiotron', [])
   .controller('Player', Player)
-  .directive('playlist', function () {
+  .directive('playercontrol', function () {
     return {
       restrict: 'E',
       scope: {
         player: '='
       },
       templateUrl: './features/playlist.template.html',
-      controller: PlaylistController,
-      controllerAs: 'playlist',
-      link: PlaylistLink
+      controller: PlayerControl,
+      controllerAs: 'pc',
+      link: PlayerControlLink
     }
   });

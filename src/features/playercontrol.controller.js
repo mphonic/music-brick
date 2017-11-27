@@ -15,7 +15,7 @@ function arrToBase64(arr) {
     return btoa(binstr);
 }
 
-export default function PlaylistController($scope) {
+export default function PlayerControl($scope) {
     var player = $scope.player;
 
     this.loadPlaylist = function (pl) {

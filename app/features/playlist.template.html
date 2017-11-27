@@ -1,10 +1,10 @@
 <div class="container">
     <div id="file-dialogs" ng-hide="player.playlist.length">
-        <div ng-click="playlist.openFiles()">
+        <div ng-click="pc.openFiles()">
             <i class="ion-ios-paper-outline"></i>
             <br /> Open Files
         </div>
-        <div ng-click="playlist.openFolder()">
+        <div ng-click="pc.openFolder()">
             <i class="ion-ios-folder-outline"></i>
             <br /> Open Folder
         </div>
@@ -24,9 +24,9 @@
                 <a class="ion-ios-rewind-outline" ng-click="player.rw()"></a>
                 <a class="ion-ios-fastforward-outline" ng-click="player.ff()"></a>
                 <div id="playlist-mods">
-                    <a class="ion-ios-paper-outline" ng-click="playlist.openFiles()" title="Open File(s)"></a>
-                    <a class="ion-ios-folder-outline" ng-click="playlist.openFolder()" title="Open Folder"></a>
-                    <a class="ion-ios-close-outline" ng-click="playlist.clearPlaylist()" title="Clear Playlist"></a>
+                    <a class="ion-ios-paper-outline" ng-click="pc.openFiles()" title="Open File(s)"></a>
+                    <a class="ion-ios-folder-outline" ng-click="pc.openFolder()" title="Open Folder"></a>
+                    <a class="ion-ios-close-outline" ng-click="pc.clearPlaylist()" title="Clear Playlist"></a>
                 </div>
             </div>
 
@@ -43,10 +43,12 @@
                             'playlist-playing': $index === player.currentIndex && player.nowPlaying, 
                             'playlist-cued': $index === player.focusedItem 
                         }" 
-                        ng-click="playlist.setFocusedItem($index, $event)"
+                        ng-click="pc.setFocusedItem($index, $event)"
                         ng-dblclick="player.play($index)" 
                         id="playlist-{{ $index }}">
-                        <span class="progress-container" ng-click="playlist.clientSeek($event)" ng-show="player.currentIndex === $index">
+                        <span class="progress-container" 
+                            ng-click="clientSeek($event)" 
+                            ng-show="player.currentIndex === $index">
                             <span class="progress-bar" ng-style="{ width: player.progressPercent }">
                             </span>
                         </span>
