@@ -14,11 +14,13 @@ const app = remote.app;
 const appDir = jetpack.cwd(app.getAppPath());
 
 import Player from "./features/player.controller.js";
+import PlaylistDialog from "./features/playlistdialog.service.js";
 import PlayerControl from "./features/playercontrol.controller.js";
 import PlayerControlLink from "./features/playercontrol.link.js";
 
 export default angular.module('audiotron', [])
   .controller('Player', Player)
+  .service('PlaylistDialog', PlaylistDialog)
   .directive('playercontrol', function () {
     return {
       restrict: 'E',
