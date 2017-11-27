@@ -112,6 +112,7 @@ export default function Player($interval) {
     this.seek = function(time) {
         if (this.nowPlaying) {
             this.nowPlaying.seek(time);
+            this.progressPercent = (this.getProgress() * 100) + '%';
         }
     }
 };

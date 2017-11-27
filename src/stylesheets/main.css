@@ -219,6 +219,7 @@ li:after {
 }
 .progress-bar {
   position: absolute;
+  width: 0;
   height: 100%;
   top: 0;
   left: 0;

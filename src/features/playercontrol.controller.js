@@ -56,6 +56,7 @@ export default function PlayerControl($scope, PlaylistDialog) {
 
     this.setFocusedItem = function (index, e) {
         // if (e.shiftKey)
+        console.log(index);
         player.focusedItem = index;
     }
 
