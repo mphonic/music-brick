@@ -40,7 +40,7 @@ export default function Player($interval) {
                 src: [item.path],
                 html5: true,
                 onend: function () {
-                    if (index < this.playlist.length - 1) {
+                    if (index < self.playlist.length - 1) {
                         self.play(index + 1);
                     }
                 }

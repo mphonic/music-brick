@@ -17,6 +17,29 @@ export default function PlayerControlLink(scope, element) {
         }
     }
 
+    scope.$watch('player.focusedItem', function(nv, ov) {
+        var el = document.getElementById('playlist-' + nv),
+            top,
+            bottom,
+            winHeight,
+            pl,
+            plTop,
+            scrollTo;
+        if (!el) return;
+        top = el.getBoundingClientRect().top;
+        bottom = el.getBoundingClientRect().bottom;
+        winHeight = window.innerHeight;
+        pl = document.getElementById('playlist');
+        plTop = pl.getBoundingClientRect().top;
+        if (bottom > winHeight) {
+            scrollTo = bottom - plTop + pl.scrollTop + el.offsetHeight - pl.offsetHeight;
+            pl.scrollTop = scrollTo;
+        } else if (top < plTop) {
+            scrollTo = top + pl.scrollTop - plTop;
+            pl.scrollTop = scrollTo;
+        }
+    });
+
     angular.element(document.querySelector('body')).bind('keyup', function (e) {
         e.preventDefault();
         // console.log(e.keyCode);
@@ -24,10 +47,10 @@ export default function PlayerControlLink(scope, element) {
             case 32:
                 player.togglePlayPause();
                 break;
-            case 40:
+            case 78:
                 player.focusedItem = Math.min(player.focusedItem + 1, player.playlist.length - 1);
                 break;
-            case 38:
+            case 80:
                 player.focusedItem = Math.max(player.focusedItem - 1, 0);
                 break;
             case 13:
