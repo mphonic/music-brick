@@ -69,7 +69,7 @@ export default function PlayerControl($scope) {
             player.stop();
         }
         player.playlist.splice(player.focusedItem, 1);
-        player.focusedItem = Math.min(index, player.playlist.length);
+        player.focusedItem = Math.min(index, player.playlist.length - 1);
         if (player.currentIndex > index) {
             player.currentIndex = player.currentIndex - 1;
         }
