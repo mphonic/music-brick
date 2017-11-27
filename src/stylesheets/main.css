@@ -45,6 +45,7 @@ body {
   -moz-user-select: none; /* mozilla browsers */
   -khtml-user-select: none; /* webkit (konqueror) browsers */
   -ms-user-select: none; /* IE10+ */
+  user-select: none;
 }
 
 img {
@@ -89,14 +90,20 @@ img {
   width: 40%;
   padding: 24px;
   background: var(--cover-bg);
+  text-align: center;
   cursor: pointer;
   overflow: hidden;
 }
 
-#player-cover img {
+#player-cover img,
+#player-cover i {
   position: relative;
   display: block;
   margin: auto;
+}
+
+#player-cover i {
+  font-size: 12em;
 }
 
 #player-items {
