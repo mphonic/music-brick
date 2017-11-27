@@ -4,15 +4,18 @@ import fs from "fs";
 import jsmediatags from "jsmediatags";
 import angular from "angular";
 
-export default function PlaylistDialog($q) {
+export default class PlaylistDialog {
 
-    this.tmplist = [];
-    this.tmpimages = [];
-    this.q = null;
-    this.audioExtensions = ['flac', 'mp3', 'm4a', 'ogg', 'wav', 'aif', 'aiff'];
+    constructor($q) {
+        this.tmplist = [];
+        this.tmpimages = [];
+        this.$q = $q;
+        this.q = null;
+        this.audioExtensions = ['flac', 'mp3', 'm4a', 'ogg', 'wav', 'aif', 'aiff'];
+    }
 
-    this.initiateFileDialog = function(type) {
-        this.q = $q.defer();
+    initiateFileDialog(type) {
+        this.q = this.$q.defer();
         if (type === 'folder') {
             this.openFolder();
         } else {
@@ -21,7 +24,7 @@ export default function PlaylistDialog($q) {
         return this.q.promise;
     }
 
-    this.processLoadedFiles = function(arr, iter, final) {
+    processLoadedFiles(arr, iter, final) {
         var item = arr[iter],
             self = this;
         jsmediatags.read(item.path, {
@@ -54,7 +57,7 @@ export default function PlaylistDialog($q) {
         });
     }
 
-    this.openFiles = function() {
+    openFiles() {
         var dialog = remote.dialog,
             self = this;
         dialog.showOpenDialog({
@@ -69,7 +72,7 @@ export default function PlaylistDialog($q) {
         });
     }
 
-    this.openFolder = function() {
+    openFolder() {
         var dialog = remote.dialog,
             self = this,
             filereg = RegExp("\.(?:" + this.audioExtensions.join('|') + ")$", "i");
@@ -97,7 +100,7 @@ export default function PlaylistDialog($q) {
         });
     }
 
-    this.loadFiles = function(data) {
+    loadFiles(data) {
         if (!data.files || !data.files.length) {
             this.q.reject('No valid audio files found.');
             return;

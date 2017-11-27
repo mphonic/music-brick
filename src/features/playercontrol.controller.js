@@ -4,88 +4,95 @@ import arrToBase64 from "../helpers/arrToBase64.js";
 
 const store = new Store();
 
-export default function PlayerControl($scope, PlaylistDialog) {
-    var player = $scope.player;
+export default class PlayerControl {
 
-    this.loadPlaylist = function (pl) {
+    constructor($scope, PlaylistDialog) {
+        this.plr = $scope.player;
+        this.playlistDialog = PlaylistDialog;
+
+        this.loadPlaylist(store.get('defaultPlaylist'));
+        $scope.removeFocusedItem = this.removeFocusedItem;
+    }
+
+    loadPlaylist(pl) {
         if (pl && pl.length) {
-            player.playlist = pl;
-            if (player.playlist[0].tags.picture) {
-                player.currentImage = "data:" + player.playlist[0].tags.picture.format + ";base64," + arrToBase64(player.playlist[0].tags.picture.data);
+            var plr = this.plr;
+            plr.playlist = pl;
+            if (pl[0].tags.picture) {
+                plr.currentImage = "data:" + pl[0].tags.picture.format + ";base64," + arrToBase64(pl[0].tags.picture.data);
             } else {
-                if (player.playlist[0].images && player.playlist[0].images.length) {
-                    player.currentImage = player.playlist[0].images[0];
+                if (pl[0].images && pl[0].images.length) {
+                    plr.currentImage = pl[0].images[0];
                 } else {
-                    player.currentImage = '';
+                    plr.currentImage = '';
                 }
             }
         }
     }
 
-    this.loadPlaylist(store.get('defaultPlaylist'));
-
-    this.savePlaylist = function (name) {
+    savePlaylist(name) {
         if (name) {
             var doIt = true;
             if (store.get('customPlaylists.' + name)) {
                 doIt = confirm('Playlist exists. Overwrite?');
             }
             if (doIt) {
-                store.set('customPlaylists.' + name, player.playlist);
+                store.set('customPlaylists.' + name, this.plr.playlist);
             }
         } else {
             alert('Please enter a playlist name.');
         }
     }
 
-    this.getCustomPlaylists = function () {
+    getCustomPlaylists() {
         return store.get('customPlaylists');
     }
 
-    this.clearPlaylist = function () {
-        player.stop();
-        player.playlist = [];
+    clearPlaylist() {
+        this.plr.stop();
+        this.plr.playlist = [];
     }
 
-    this.setFocusedItem = function (index, e) {
+    setFocusedItem(index, e) {
         // if (e.shiftKey)
-        player.focusedItem = index;
+        this.plr.focusedItem = index;
     }
 
-    this.removeFocusedItem = function () {
-        var index = player.focusedItem;
-        if (player.focusedItem === player.currentIndex && player.nowPlaying) {
-            player.stop();
+    removeFocusedItem(plr) {
+        var index;
+        plr = (plr)?plr:this.plr;
+        index = plr.focusedItem;
+        if (index === plr.currentIndex && plr.nowPlaying) {
+            plr.stop();
         }
-        player.playlist.splice(player.focusedItem, 1);
-        player.focusedItem = Math.min(index, player.playlist.length - 1);
-        if (player.currentIndex > index) {
-            player.currentIndex = player.currentIndex - 1;
+        plr.playlist.splice(plr.focusedItem, 1);
+        plr.focusedItem = Math.min(index, plr.playlist.length - 1);
+        if (plr.currentIndex > index) {
+            plr.currentIndex = plr.currentIndex - 1;
         }
     }
 
-    $scope.removeFocusedItem = this.removeFocusedItem;
-
-    this.openDialog = function(type) {
-        var promise = PlaylistDialog.initiateFileDialog(type),
+    openDialog(type) {
+        var promise = this.playlistDialog.initiateFileDialog(type),
             self = this;
         promise.then(function(list) {
+            var plr = self.plr;
             if (list && list.length > 0) {
                 list.sort(function (a, b) {
                     return parseInt(a.tags.track) - parseInt(b.tags.track);
                 });
-                if (player.playlist.length < 1) {
+                if (plr.playlist.length < 1) {
                     if (list[0].tags.picture) {
-                        player.currentImage = "data:" + list[0].tags.picture.format + ";base64," + arrToBase64(list[0].tags.picture.data);
+                        plr.currentImage = "data:" + list[0].tags.picture.format + ";base64," + arrToBase64(list[0].tags.picture.data);
                     } else {
                         if (list[0].images && list[0].images.length) {
-                            player.currentImage = list[0].images[0];
+                            plr.currentImage = list[0].images[0];
                         } else {
-                            player.currentImage = '';
+                            plr.currentImage = '';
                         }
                     }
                 }
-                player.playlist = player.playlist.concat(list);
+                plr.playlist = plr.playlist.concat(list);
             } else {
                 alert("No valid audio files found.");
             }

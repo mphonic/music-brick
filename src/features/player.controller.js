@@ -1,18 +1,21 @@
 import howler from "howler";
 import arrToBase64 from "../helpers/arrToBase64.js";
 
-export default function Player($interval) {
+export default class Player {
 
-    this.playlist = [];
-    this.nowPlaying = null;
-    this.currentIndex = 0;
-    this.focusedItem = 0;
-    this.currentImage = null;
-    this.paused = false;
-    this.timer = null;
-    this.progressPercent = '0%';
+    constructor($interval) {
+        this.playlist = [];
+        this.nowPlaying = null;
+        this.currentIndex = 0;
+        this.focusedItem = 0;
+        this.currentImage = null;
+        this.paused = false;
+        this.timer = null;
+        this.progressPercent = '0%';
+        this.$interval = $interval;
+    }
 
-    this.getProgress = function() {
+    getProgress() {
         if (!this.nowPlaying) return 0;
         var dur = this.nowPlaying.duration(),
             seek = this.nowPlaying.seek();
@@ -20,19 +23,22 @@ export default function Player($interval) {
         return seek / dur;
     }
 
-    this.startProgressTimer = function() {
+    startProgressTimer() {
         var self = this;
-        this.timer = $interval(function () {
-            var progress = self.getProgress();
-            self.progressPercent = (progress * 100) + '%';
-        }, 200);
+        if (!this.timer) {
+            this.timer = this.$interval(function () {
+                var progress = self.getProgress();
+                self.progressPercent = (progress * 100) + '%';
+            }, 200);
+        }
     }
 
-    this.stopProgressTimer = function() {
-        $interval.cancel(this.timer);
+    stopProgressTimer() {
+        this.$interval.cancel(this.timer);
+        this.timer = null;
     }
 
-    this.play = function(index) {
+    play(index) {
         var item = this.playlist[index],
             self = this;
         if (!item.howl) {
@@ -49,10 +55,11 @@ export default function Player($interval) {
         if (this.nowPlaying) {
             this.nowPlaying.stop();
         }
-        item.howl.play();
+        this.paused = false;
         this.nowPlaying = item.howl;
         this.currentIndex = index;
         this.focusedItem = index;
+        item.howl.play();
         if (item.tags.picture) {
             this.currentImage = "data:" + item.tags.picture.format + ";base64," + arrToBase64(item.tags.picture.data);
         } else {
@@ -62,27 +69,34 @@ export default function Player($interval) {
                 this.currentImage = '';
             }
         }
-        this.paused = false;
         this.startProgressTimer();
     }
 
-    this.togglePlayPause = function() {
+    resume() {
+        this.paused = false;
+        this.nowPlaying.play();
+        this.startProgressTimer();
+    }
+
+    pause() {
+        this.paused = true;
+        this.nowPlaying.pause();
+        this.stopProgressTimer();
+    }
+
+    togglePlayPause() {
         if (this.nowPlaying) {
             if (!this.paused) {
-                this.paused = true;
-                this.nowPlaying.pause();
-                this.stopProgressTimer();
+                this.pause();
             } else {
-                this.paused = false;
-                this.nowPlaying.play();
-                this.startProgressTimer();
+                this.resume();
             }
         } else {
             this.play(this.focusedItem);
         }
     }
 
-    this.stop = function() {
+    stop() {
         if (this.nowPlaying) {
             this.nowPlaying.stop();
             this.nowPlaying = null;
@@ -92,7 +106,7 @@ export default function Player($interval) {
         }
     }
 
-    this.rw = function() {
+    rw() {
         if (this.nowPlaying) {
             if (this.nowPlaying.seek() > 1) {
                 this.nowPlaying.seek(0);
@@ -102,7 +116,7 @@ export default function Player($interval) {
         }
     }
 
-    this.ff = function() {
+    ff() {
         if (this.nowPlaying) {
             if (this.currentIndex < this.playlist.length - 1) {
                 this.play(this.currentIndex + 1);
@@ -110,7 +124,7 @@ export default function Player($interval) {
         }
     }
 
-    this.seek = function(time) {
+    seek(time) {
         if (this.nowPlaying) {
             this.nowPlaying.seek(time);
             this.progressPercent = (this.getProgress() * 100) + '%';

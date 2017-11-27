@@ -65,7 +65,7 @@ export default function PlayerControlLink(scope, element) {
                 player.rw();
                 break;
             case 8 || 46:
-                scope.removeFocusedItem();
+                scope.removeFocusedItem(player);
                 break;
             default:
                 isUsed = false;
