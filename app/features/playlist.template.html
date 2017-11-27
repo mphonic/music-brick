@@ -1,0 +1,62 @@
+<div class="container">
+    <div id="file-dialogs" ng-hide="player.playlist.length">
+        <div ng-click="playlist.openFiles()">
+            <i class="ion-ios-paper-outline"></i>
+            <br /> Open Files
+        </div>
+        <div ng-click="playlist.openFolder()">
+            <i class="ion-ios-folder-outline"></i>
+            <br /> Open Folder
+        </div>
+    </div>
+    <div id="player-container" ng-show="player.playlist.length">
+
+        <div id="player-cover" ng-click="player.togglePlayPause()">
+            <img ng-src="{{ player.currentImage }}" />
+        </div>
+        <div id="player-items">
+
+            <div id="player-controls">
+                <a ng-class="{ 
+                    'ion-ios-play-outline': player.paused || !player.nowPlaying, 
+                    'ion-ios-pause-outline': player.nowPlaying && !player.paused
+                }" ng-click="player.togglePlayPause()"></a>
+                <a class="ion-ios-rewind-outline" ng-click="player.rw()"></a>
+                <a class="ion-ios-fastforward-outline" ng-click="player.ff()"></a>
+                <div id="playlist-mods">
+                    <a class="ion-ios-paper-outline" ng-click="playlist.openFiles()" title="Open File(s)"></a>
+                    <a class="ion-ios-folder-outline" ng-click="playlist.openFolder()" title="Open Folder"></a>
+                    <a class="ion-ios-close-outline" ng-click="playlist.clearPlaylist()" title="Clear Playlist"></a>
+                </div>
+            </div>
+
+            <div id="playlist-labels">
+                <span class="track-header track-title">Title</span>
+                <span class="track-header track-album">Album</span>
+                <span class="track-header track-artist">Artist</span>
+            </div>
+
+            <div id="playlist">
+                <ul>
+                    <li ng-repeat="item in player.playlist track by $index" 
+                        ng-class="{ 
+                            'playlist-playing': $index === player.currentIndex && player.nowPlaying, 
+                            'playlist-cued': $index === player.focusedItem 
+                        }" 
+                        ng-click="playlist.setFocusedItem($index, $event)"
+                        ng-dblclick="player.play($index)" 
+                        id="playlist-{{ $index }}">
+                        <span class="progress-container" ng-click="playlist.clientSeek($event)" ng-show="player.currentIndex === $index">
+                            <span class="progress-bar" ng-style="{ width: player.progressPercent }">
+                            </span>
+                        </span>
+                        <span class="track-info track-title" title="{{ item.tags.title }}">{{ item.tags.title }}</span>
+                        <span class="track-info track-album" title="{{ item.tags.album }}">{{ item.tags.album }}</span>
+                        <span class="track-info track-artist" title="{{ item.tags.artist }}">{{ item.tags.artist }}</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
