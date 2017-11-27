@@ -40,17 +40,17 @@ export default function PlayerControlLink(scope, element) {
         }
     });
 
-    angular.element(document.querySelector('body')).bind('keyup', function (e) {
-        e.preventDefault();
+    angular.element(document.querySelector('html')).bind('keydown', function (e) {
+        var isUsed = true;
         // console.log(e.keyCode);
         switch (e.keyCode) {
             case 32:
                 player.togglePlayPause();
                 break;
-            case 78:
+            case 40:
                 player.focusedItem = Math.min(player.focusedItem + 1, player.playlist.length - 1);
                 break;
-            case 80:
+            case 38:
                 player.focusedItem = Math.max(player.focusedItem - 1, 0);
                 break;
             case 13:
@@ -67,7 +67,10 @@ export default function PlayerControlLink(scope, element) {
             case 8 || 46:
                 scope.removeFocusedItem();
                 break;
+            default:
+                isUsed = false;
         }
+        if (isUsed) e.preventDefault();
         scope.$apply();
     });
 
