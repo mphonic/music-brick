@@ -48,7 +48,7 @@
                         id="playlist-{{ $index }}">
                         <span class="progress-container" 
                             ng-click="clientSeek($event)" 
-                            ng-show="player.currentIndex === $index">
+                            ng-show="player.currentIndex === $index && player.nowPlaying">
                             <span class="progress-bar" ng-style="{ width: player.progressPercent }">
                             </span>
                         </span>
