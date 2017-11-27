@@ -24,55 +24,9 @@ if (env.name !== "production") {
 }
 
 app.on("ready", () => {
-  const fileMenuTemplate = {
-    label: "File",
-    submenu: [
-      { label: "Open File(s)", accelerator: "CmdOrCtrl+O", click: function () { openFileDialog(false) } },
-      { label: "Open Folder", accelerator: "CmdOrCtrl+F", click: function () { openFileDialog(true) } }
-    ]
-  };
-
-  function openFileDialog(selectFolder) {
-    var selection, fileFilters;
-    if (selectFolder) {
-      selection = 'openDirectory';
-      fileFilters = [{ name: 'All Files', extensions: ['*'] }];
-    } else {
-      selection = 'multiSelections';
-      fileFilters = [{ name: 'Audio', extensions: ['flac', 'mp3', 'm4a', 'ogg', 'wav', 'aif', 'aiff'] }];
-    }
-    dialog.showOpenDialog(mainWindow, {
-      properties: [selection],
-      filters: fileFilters
-    }, function (result) {
-      var filelist, imglist;
-      if (!selectFolder) {
-        filelist = result;
-        mainWindow.webContents.send('modal-filelist', { files: filelist });
-      } else {
-        var rootpath = result[0];
-        fs.readdir(rootpath, function (err, files) {
-          var fullpath;
-          filelist = [];
-          imglist = [];
-          for (var i = 0; i < files.length; i++) {
-            var item = {};
-            fullpath = path.join(rootpath, files[i]);
-            if (files[i].match(/\.(?:flac|wav|mp3|m4a|ogg|aif|aiff)$/i)) {
-              item.path = fullpath;
-              filelist.push(item);
-            } else if (files[i].match(/\.(?:png|jpg|jpeg|gif)$/i)) {
-              imglist.push(fullpath);
-            }
-          }
-          mainWindow.webContents.send('modal-filelist', { files: filelist, images: imglist });
-        });
-      }
-    })
-  }
 
   const setApplicationMenu = () => {
-    const menus = [fileMenuTemplate, editMenuTemplate];
+    const menus = [editMenuTemplate];
     if (env.name !== "production") {
       menus.push(devMenuTemplate);
       Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
@@ -85,7 +39,7 @@ app.on("ready", () => {
 
   const mainWindow = createWindow("main", {
     width: 875,
-    height: 350
+    height: 360
   });
 
   mainWindow.loadURL(

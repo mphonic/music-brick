@@ -15,7 +15,7 @@ export default function PlayerControl($scope, PlaylistDialog) {
     var player = $scope.player;
 
     this.loadPlaylist = function (pl) {
-        if (pl.length) {
+        if (pl && pl.length) {
             player.playlist = pl;
             if (player.playlist[0].tags.picture) {
                 player.currentImage = "data:" + player.playlist[0].tags.picture.format + ";base64," + arrToBase64(player.playlist[0].tags.picture.data);

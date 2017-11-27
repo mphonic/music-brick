@@ -1,15 +1,15 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
-  "description": "Starter for your Electron application",
-  "version": "0.0.0",
+  "name": "concentric-audio",
+  "productName": "Concentric Audio",
+  "description": "Minimalist audio player",
+  "version": "0.0.3",
   "private": true,
-  "author": "Mr. Gumby <mr.gumby@example.com>",
-  "copyright": "© 2017, Gumby inc.",
-  "homepage": "http://example.com",
+  "author": "Bhob Rainey <info@bhobrainey.com",
+  "copyright": "© 2017, Bhob Rainey",
+  "homepage": "https://bhobrainey.com",
   "main": "app/background.js",
   "build": {
-    "appId": "com.example.electron-boilerplate",
+    "appId": "com.electron.concentric-audio",
     "files": [
       "app/**/*",
       "node_modules/**/*",
