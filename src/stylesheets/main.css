@@ -247,6 +247,14 @@ ul {
   padding-right: 15px;
 }
 
+.track-title {
+  width: 44%;
+}
+
+.track-album, .track-artist {
+  width: 28%;
+}
+
 .progress-container {
   position: absolute;
   width: 100%;
