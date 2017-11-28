@@ -39,7 +39,12 @@ app.on("ready", () => {
 
   const mainWindow = createWindow("main", {
     width: 875,
-    height: 360
+    height: 360,
+    backgroundColor: '#002b36',
+    resizable: false,
+    maximizable: false,
+    darkTheme: true,
+    thickFrame: false
   });
 
   mainWindow.loadURL(
