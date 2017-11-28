@@ -7,11 +7,18 @@ const store = new Store();
 export default class PlayerControl {
 
     constructor($scope, PlaylistDialog) {
+        var self = this;
         this.plr = $scope.player;
         this.playlistDialog = PlaylistDialog;
+        this.percentFilesLoaded = 0;
 
         this.loadPlaylist(store.get('defaultPlaylist'));
         $scope.removeFocusedItem = this.removeFocusedItem;
+        $scope.$on('file-progress', function(e, a) {
+            self.screenMsg = 'Getting file information...';
+            self.percentFilesLoaded = 100 * a.loaded / a.total;
+            $scope.$apply();
+        });
     }
 
     loadPlaylist(pl) {
@@ -75,7 +82,6 @@ export default class PlayerControl {
     openDialog(type) {
         var promise = this.playlistDialog.initiateFileDialog(type),
             self = this;
-        this.screenMsg = 'Getting file information...';
         promise.then(function(list) {
             var plr = self.plr;
             if (list && list.length > 0) {
@@ -95,6 +101,7 @@ export default class PlayerControl {
                 }
                 plr.playlist = plr.playlist.concat(list);
                 self.screenMsg = false;
+                self.percentFilesLoaded = 0;
             } else {
                 alert("No valid audio files found.");
             }

@@ -3,7 +3,7 @@ import arrToBase64 from "../helpers/arrToBase64.js";
 
 export default class Player {
 
-    constructor($interval) {
+    constructor($scope, $interval) {
         this.playlist = [];
         this.nowPlaying = null;
         this.currentIndex = 0;
@@ -13,6 +13,7 @@ export default class Player {
         this.timer = null;
         this.progressPercent = '0%';
         this.$interval = $interval;
+        this.$scope = $scope;
     }
 
     getProgress() {
@@ -48,6 +49,10 @@ export default class Player {
                 onend: function () {
                     if (index < self.playlist.length - 1) {
                         self.play(index + 1);
+                    } else {
+                        self.stop();
+                        self.focusedItem = 0;
+                        self.$scope.$apply();
                     }
                 }
             });

@@ -6,12 +6,15 @@ import angular from "angular";
 
 export default class PlaylistDialog {
 
-    constructor($q) {
+    constructor($q, $rootScope) {
         this.tmplist = [];
         this.tmpimages = [];
         this.$q = $q;
+        this.$rootScope = $rootScope;
         this.q = null;
-        this.audioExtensions = ['flac', 'mp3', 'm4a', 'ogg', 'wav', 'aif', 'aiff'];
+        this.totalFilesToLoad = 0;
+        this.filesLoaded = 0;
+        this.audioExtensions = ["mp3", "mpeg", "opus", "ogg", "oga", "wav", "aac", "caf", "m4a", "mp4", "weba", "webm", "dolby", "flac"];
     }
 
     initiateFileDialog(type) {
@@ -40,6 +43,8 @@ export default class PlaylistDialog {
                 if (iter === final) {
                     self.q.resolve(self.tmplist);
                 } else {
+                    self.filesLoaded++;
+                    self.$rootScope.$broadcast('file-progress', { total: self.totalFilesToLoad, loaded: self.filesLoaded });
                     self.processLoadedFiles(arr, iter + 1, final);
                 }
             },
@@ -48,9 +53,12 @@ export default class PlaylistDialog {
                     title: path.basename(item.path),
                     track: path.basename(item.path)
                 }
+                self.tmplist.push(item);
                 if (iter === final) {
                     self.q.resolve(self.tmplist);
                 } else {
+                    self.filesLoaded++;
+                    self.$rootScope.$broadcast('file-progress', { total: self.totalFilesToLoad, loaded: self.filesLoaded });
                     self.processLoadedFiles(arr, iter + 1, final);
                 }
             }
@@ -107,6 +115,8 @@ export default class PlaylistDialog {
         }
         this.tmplist = [];
         this.tmpimages = data.images;
+        this.totalFilesToLoad = data.files.length;
+        this.filesLoaded = 0;
         this.processLoadedFiles(data.files, 0, data.files.length - 1);
     }
 }

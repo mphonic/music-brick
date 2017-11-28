@@ -1,6 +1,8 @@
 <div class="container">
     <div id="msg-screen" ng-show="pc.screenMsg">
-        {{ pc.screenMsg }}</div>
+        <div id="msg-progress" ng-style="{ width: pc.percentFilesLoaded + '%' }"></div>
+        <div id="msg-screen-msg">{{ pc.screenMsg }}</div>
+    </div>
     <div id="file-dialogs" ng-hide="player.playlist.length">
         <div ng-click="pc.openDialog('files')">
             <i class="ion-ios-paper-outline"></i>

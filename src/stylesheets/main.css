@@ -54,14 +54,34 @@ img {
 }
 
 #msg-screen {
-  display: table;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   text-align: center;
-  vertical-align: middle;
+  background: rgba(0,0,0,0.6);
+  z-index: 300;
+}
+
+#msg-screen-msg {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 4em;
+  text-align: center;
+  width: 100%;
+  z-index: 100;
+}
+
+#msg-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--progress-bar-color);
+  opacity: 0.5;
+  transition: width 0.2s;
 }
 
 #file-dialogs {
