@@ -3,7 +3,7 @@ import Store from "electron-store";
 const store = new Store();
 
 export default function PlayerControlLink(scope, element) {
-    var player = scope.player, animateScroll, timer;
+    var player = scope.player, animateScroll, animateScrollTimer;
 
     scope.clientSeek = function (e) {
         e.stopPropagation();
@@ -48,7 +48,7 @@ export default function PlayerControlLink(scope, element) {
             scrollTo = top + pl.scrollTop - plTop;
         }
         if (scrollTo !== undefined) {
-            clearTimeout(timer);
+            clearTimeout(animateScrollTimer);
             animateScroll(pl.scrollTop, scrollTo, pl);
         }
     });
@@ -88,6 +88,6 @@ export default function PlayerControlLink(scope, element) {
     });
 
     window.onbeforeunload = function(e) {
-        store.set('defaultPlaylist', player.playlist);
+        store.set('defaultPlaylist', scope.player.playlist);
     }
 }

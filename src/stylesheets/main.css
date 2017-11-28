@@ -1,19 +1,19 @@
 :root {
-  --main-bg: rgb(1, 0, 8);
+  --main-bg: #002b36;
   --main-text-color: #eee;
   --main-font: system-ui, sans-serif;
-  --cover-bg: rgb(1, 0, 8);
-  --player-bg: #111;
-  --controls-bg: #151212;
+  --cover-bg: var(--main-bg);
+  --player-bg: #073642;
+  --controls-bg: #073642;
   --controls-font-color: #eee;
   --playlist-bg: var(--controls-bg);
-  --playlist-label-bg: rgb(1, 0, 8);;
-  --playlist-label-color: #aaa;
+  --playlist-label-bg: var(--main-bg);
+  --playlist-label-color: #586e75;
   --playlist-font-color: #eee;
   --playlist-playing-bg: var(--cover-bg);
-  --playlist-cued-bg: rgb(87, 115, 156);
-  --playlist-cued-border-color: rgb(130, 168, 228);
-  --playlist-hover-bg: #222;
+  --playlist-cued-bg: #268bd2;
+  --playlist-cued-border-color: rgb(58, 137, 255);
+  --playlist-hover-bg: #586e75;
   --progress-bar-color: orange;
   --progress-bar-opacity: 0.5;
 }
@@ -193,7 +193,6 @@ ul {
     bottom:1px;
     left: 0;
     z-index: 200;
-    box-shadow: 0px 0px 2px 2px #000000;
 }
 
 #playlist .playlist-playing,
@@ -233,4 +232,27 @@ ul {
   left: 0;
   background: var(--progress-bar-color);
   opacity: var(--progress-bar-opacity);
+}
+
+/* scrollbar */
+#playlist::-webkit-scrollbar {
+  display: none;
+  width: 4px;
+}
+ 
+/* Track */
+#playlist::-webkit-scrollbar-track {
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+ 
+/* Handle */
+#playlist::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  background: rgba(203,75,22, 0.8); 
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+#playlist::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(255,0,0,0.4); 
 }
