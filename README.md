@@ -10,7 +10,7 @@ Then type the following commands:
 
 ```
 
-git clone [https://github.com/mphonic/music-brick.git](https://github.com/mphonic/music-brick.git)
+git clone https://github.com/mphonic/music-brick.git
 
 cd music-brick
 
