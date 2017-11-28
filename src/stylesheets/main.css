@@ -273,6 +273,18 @@ ul {
   opacity: var(--progress-bar-opacity);
 }
 
+#playlist .as-sortable-item-handle {
+  cursor: pointer;
+}
+
+#playlist .as-sortable-placeholder {
+  cursor: move;
+  border: 1px dotted;
+  border-color: var(--playlist-label-color);
+  border-left: none;
+  border-right: none;
+}
+
 /* scrollbar */
 #playlist::-webkit-scrollbar {
   display: none;

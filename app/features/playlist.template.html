@@ -40,23 +40,26 @@
             </div>
 
             <div id="playlist">
-                <ul>
-                    <li ng-repeat="item in player.playlist track by $index" 
+                <ul as-sortable="pc.sortListeners" ng-model="player.playlist">
+                    <li ng-repeat="item in player.playlist" 
                         ng-class="{ 
                             'playlist-playing': $index === player.currentIndex && player.nowPlaying, 
                             'playlist-cued': $index === player.focusedItem 
                         }" 
                         ng-click="pc.setFocusedItem($index, $event)"
-                        ng-dblclick="player.play($index)">
-                        <span class="progress-container" 
-                            ng-click="clientSeek($event)" 
-                            ng-show="player.currentIndex === $index && player.nowPlaying">
-                            <span class="progress-bar" ng-style="{ width: player.progressPercent + '%' }">
+                        ng-dblclick="player.play($index)"
+                        as-sortable-item>
+                        <div as-sortable-item-handle>
+                            <span class="progress-container" 
+                                ng-click="clientSeek($event)" 
+                                ng-show="player.currentIndex === $index && player.nowPlaying">
+                                <span class="progress-bar" ng-style="{ width: player.progressPercent + '%' }">
+                                </span>
                             </span>
-                        </span>
-                        <span class="track-info track-title" title="{{ item.tags.title }}">{{ item.tags.title }}</span>
-                        <span class="track-info track-album" title="{{ item.tags.album }}">{{ item.tags.album }}</span>
-                        <span class="track-info track-artist" title="{{ item.tags.artist }}">{{ item.tags.artist }}</span>
+                            <span class="track-info track-title" title="{{ item.tags.title }}">{{ item.tags.title }}</span>
+                            <span class="track-info track-album" title="{{ item.tags.album }}">{{ item.tags.album }}</span>
+                            <span class="track-info track-artist" title="{{ item.tags.artist }}">{{ item.tags.artist }}</span>
+                        </div>
                     </li>
                 </ul>
             </div>

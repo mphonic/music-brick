@@ -1,4 +1,5 @@
 import "./stylesheets/main.css";
+import "../node_modules/ng-sortable/dist/ng-sortable.min.css";
 
 import "./helpers/context_menu.js";
 import "./helpers/external_links.js";
@@ -18,7 +19,9 @@ import PlaylistDialog from "./features/playlist-dialog.service.js";
 import PlayerControl from "./features/player-control.controller.js";
 import PlayerControlLink from "./features/player-control.link.js";
 
-export default angular.module('audiotron', [require('angular-animate')])
+import assortable from "ng-sortable";
+
+export default angular.module('audiotron', [require('angular-animate'), assortable])
   .controller('Player', Player)
   .service('PlaylistDialog', PlaylistDialog)
   .directive('playercontrol', function () {

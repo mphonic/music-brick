@@ -44,13 +44,13 @@ export default class Player {
     }
 
     play(index) {
-        var item = this.playlist[index],
-            self = this;
+        var item = this.playlist[index];
         if (!item.howl) {
             item.howl = new Howl({
                 src: [item.path],
                 html5: true,
                 onend: () => {
+                    var index = this.currentIndex;
                     if (index < this.playlist.length - 1) {
                         this.play(index + 1);
                     } else {

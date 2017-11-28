@@ -12,8 +12,44 @@ export default class PlayerControl {
         this.plr = $scope.player;
         this.percentFilesLoaded = 0;
 
+        // get the default playlist on load
         this.loadPlaylist(store.get('defaultPlaylist'));
+
+        // drag sorting listeners
+        this.sortListeners = {
+            accept: function () { return true },
+            orderChanged: (e) => {
+                var ci = this.plr.currentIndex,
+                    fi = this.plr.focusedItem,
+                    dest = e.dest.index,
+                    source = e.source.index;
+                if (ci === source) {
+                    this.plr.currentIndex = dest;
+                } else if (ci >= dest && ci < source) {
+                    this.plr.currentIndex++;
+                } else if (ci <= dest && ci > source) {
+                    this.plr.currentIndex--;
+                }
+                
+                if (fi === source) {
+                    this.plr.focusedItem = dest;
+                } else if (fi >= dest && fi < source) {
+                    this.plr.focusedItem++;
+                } else if (fi <= dest && fi > source) {
+                    this.plr.focusedItem--;
+                }
+                console.log(this.plr.playlist);
+            },
+            containment: '#playlist',
+            clone: false, 
+            allowDuplicates: false,
+        };
+
+        // so the link function remove an item responding to keypresses
         $scope.removeFocusedItem = this.removeFocusedItem;
+
+        // broadcast from the PlaylistDialog service when files
+        // are being loaded
         $scope.$on('file-progress', (e, a) => {
             this.screenMsg = 'Getting file information...';
             this.percentFilesLoaded = 100 * a.loaded / a.total;
