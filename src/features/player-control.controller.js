@@ -5,15 +5,16 @@ import arrToBase64 from "../helpers/arrToBase64.js";
 const store = new Store();
 
 const _pd = new WeakMap();
+const _sp = new WeakMap();
 
 export default class PlayerControl {
 
-    constructor($scope, PlaylistDialog) {
+    constructor($scope, $window, PlaylistDialog) {
         this.plr = $scope.player;
         this.percentFilesLoaded = 0;
 
         // get the default playlist on load
-        this.loadPlaylist(store.get('defaultPlaylist'));
+        this.loadPlaylist(store.get('playlists.default'));
 
         // drag sorting listeners
         this.sortListeners = {
@@ -38,7 +39,6 @@ export default class PlayerControl {
                 } else if (fi <= dest && fi > source) {
                     this.plr.focusedItem--;
                 }
-                console.log(this.plr.playlist);
             },
             containment: '#playlist',
             clone: false, 
@@ -57,6 +57,20 @@ export default class PlayerControl {
         });
 
         _pd.set(this, PlaylistDialog);
+
+        // function to save a playlist based on a "sanitized" key
+        _sp.set(this, (key) => {
+            if(key) {
+                var pl = angular.copy(this.plr.playlist);
+                // clear out any howls so that the object can be serialized
+                angular.forEach(pl, function (e, c) {
+                    e.howl = null;
+                });
+                store.set('playlists.' + key, pl);
+            }
+        });
+        // and save the default playlist when the app is closed
+        $window.onbeforeunload = () => { _sp.get(this)('default'); }
     }
 
     loadPlaylist(pl) {
@@ -78,11 +92,11 @@ export default class PlayerControl {
     savePlaylist(name) {
         if (name) {
             var doIt = true;
-            if (store.get('customPlaylists.' + name)) {
+            if (store.get('playlists.' + name)) {
                 doIt = confirm('Playlist exists. Overwrite?');
             }
             if (doIt) {
-                store.set('customPlaylists.' + name, this.plr.playlist);
+                _sp.get(this)(name);
             }
         } else {
             alert('Please enter a playlist name.');

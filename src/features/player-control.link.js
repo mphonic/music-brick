@@ -1,6 +1,3 @@
-import Store from "electron-store";
-
-const store = new Store();
 
 export default function PlayerControlLink(scope, element) {
     var player = scope.player, animateScroll, animateScrollTimer;
@@ -86,8 +83,4 @@ export default function PlayerControlLink(scope, element) {
         if (isUsed) e.preventDefault();
         scope.$apply();
     });
-
-    window.onbeforeunload = function(e) {
-        store.set('defaultPlaylist', scope.player.playlist);
-    }
 }
