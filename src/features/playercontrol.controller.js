@@ -75,6 +75,7 @@ export default class PlayerControl {
     openDialog(type) {
         var promise = this.playlistDialog.initiateFileDialog(type),
             self = this;
+        this.screenMsg = 'Getting file information...';
         promise.then(function(list) {
             var plr = self.plr;
             if (list && list.length > 0) {
@@ -93,6 +94,7 @@ export default class PlayerControl {
                     }
                 }
                 plr.playlist = plr.playlist.concat(list);
+                self.screenMsg = false;
             } else {
                 alert("No valid audio files found.");
             }

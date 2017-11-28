@@ -1,4 +1,6 @@
 <div class="container">
+    <div id="msg-screen" ng-show="pc.screenMsg">
+        {{ pc.screenMsg }}</div>
     <div id="file-dialogs" ng-hide="player.playlist.length">
         <div ng-click="pc.openDialog('files')">
             <i class="ion-ios-paper-outline"></i>
@@ -10,7 +12,6 @@
         </div>
     </div>
     <div id="player-container" ng-show="player.playlist.length">
-
         <div id="player-cover" ng-click="player.togglePlayPause()">
             <img ng-src="{{ player.currentImage }}" ng-show="player.currentImage" />
             <i class="ion-disc" ng-show="!player.currentImage"></i>

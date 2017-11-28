@@ -92,7 +92,7 @@ export default class Player {
                 this.resume();
             }
         } else {
-            this.play(this.focusedItem);
+            this.play(this.focusedItem || 0);
         }
     }
 
