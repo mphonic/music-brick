@@ -38,6 +38,9 @@ export default class PlaylistDialog {
                 if (!item.tags.title) {
                     item.tags.title = path.basename(item.path);
                 }
+                if (!item.tags.track) {
+                    item.tags.track = path.basename(item.path);
+                }
                 item.images = self.tmpimages;
                 self.tmplist.push(item);
                 if (iter === final) {

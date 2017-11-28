@@ -86,7 +86,9 @@ export default class PlayerControl {
             var plr = self.plr;
             if (list && list.length > 0) {
                 list.sort(function (a, b) {
-                    return parseInt(a.tags.track) - parseInt(b.tags.track);
+                    if (a.tags.track < b.tags.track) return -1;
+                    if (a.tags.track > b.tags.track) return 1;
+                    return 0;
                 });
                 if (plr.playlist.length < 1) {
                     if (list[0].tags.picture) {
