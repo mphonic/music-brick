@@ -4,21 +4,23 @@ import arrToBase64 from "../helpers/arrToBase64.js";
 
 const store = new Store();
 
+const _pd = new WeakMap();
+
 export default class PlayerControl {
 
     constructor($scope, PlaylistDialog) {
-        var self = this;
         this.plr = $scope.player;
-        this.playlistDialog = PlaylistDialog;
         this.percentFilesLoaded = 0;
 
         this.loadPlaylist(store.get('defaultPlaylist'));
         $scope.removeFocusedItem = this.removeFocusedItem;
-        $scope.$on('file-progress', function(e, a) {
-            self.screenMsg = 'Getting file information...';
-            self.percentFilesLoaded = 100 * a.loaded / a.total;
+        $scope.$on('file-progress', (e, a) => {
+            this.screenMsg = 'Getting file information...';
+            this.percentFilesLoaded = 100 * a.loaded / a.total;
             $scope.$apply();
         });
+
+        _pd.set(this, PlaylistDialog);
     }
 
     loadPlaylist(pl) {
@@ -80,10 +82,9 @@ export default class PlayerControl {
     }
 
     openDialog(type) {
-        var promise = this.playlistDialog.initiateFileDialog(type),
-            self = this;
-        promise.then(function(list) {
-            var plr = self.plr;
+        var promise = _pd.get(this).initiateFileDialog(type);
+        promise.then((list) => {
+            var plr = this.plr;
             if (list && list.length > 0) {
                 list.sort(function (a, b) {
                     if (a.tags.track < b.tags.track) return -1;
@@ -102,8 +103,8 @@ export default class PlayerControl {
                     }
                 }
                 plr.playlist = plr.playlist.concat(list);
-                self.screenMsg = false;
-                self.percentFilesLoaded = 0;
+                this.screenMsg = false;
+                this.percentFilesLoaded = 0;
             } else {
                 alert("No valid audio files found.");
             }

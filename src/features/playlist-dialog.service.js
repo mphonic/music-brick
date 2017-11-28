@@ -31,7 +31,7 @@ export default class PlaylistDialog {
         var item = arr[iter],
             self = this;
         jsmediatags.read(item.path, {
-            onSuccess: function (tags) {
+            onSuccess: (tags) => {
                 for (var key in tags) {
                     item[key] = tags[key];
                 }
@@ -41,58 +41,56 @@ export default class PlaylistDialog {
                 if (!item.tags.track) {
                     item.tags.track = path.basename(item.path);
                 }
-                item.images = self.tmpimages;
-                self.tmplist.push(item);
+                item.images = this.tmpimages;
+                this.tmplist.push(item);
                 if (iter === final) {
-                    self.q.resolve(self.tmplist);
+                    this.q.resolve(this.tmplist);
                 } else {
-                    self.filesLoaded++;
-                    self.$rootScope.$broadcast('file-progress', { total: self.totalFilesToLoad, loaded: self.filesLoaded });
-                    self.processLoadedFiles(arr, iter + 1, final);
+                    this.filesLoaded++;
+                    this.$rootScope.$broadcast('file-progress', { total: this.totalFilesToLoad, loaded: this.filesLoaded });
+                    this.processLoadedFiles(arr, iter + 1, final);
                 }
             },
-            onError: function (error) {
+            onError: (error) => {
                 item.tags = {
                     title: path.basename(item.path),
                     track: path.basename(item.path)
                 }
-                self.tmplist.push(item);
+                this.tmplist.push(item);
                 if (iter === final) {
-                    self.q.resolve(self.tmplist);
+                    this.q.resolve(this.tmplist);
                 } else {
-                    self.filesLoaded++;
-                    self.$rootScope.$broadcast('file-progress', { total: self.totalFilesToLoad, loaded: self.filesLoaded });
-                    self.processLoadedFiles(arr, iter + 1, final);
+                    this.filesLoaded++;
+                    this.$rootScope.$broadcast('file-progress', { total: this.totalFilesToLoad, loaded: this.filesLoaded });
+                    this.processLoadedFiles(arr, iter + 1, final);
                 }
             }
         });
     }
 
     openFiles() {
-        var dialog = remote.dialog,
-            self = this;
+        var dialog = remote.dialog;
         dialog.showOpenDialog({
             properties: ['multiSelections'],
             filters: [{ name: 'Audio Files', extensions: this.audioExtensions }]
-        }, function (result) {
+        }, (result) => {
             var arr = [];
             angular.forEach(result, function (e, c) {
                 arr.push({ path: e });
             });
-            self.loadFiles({ files: arr });
+            this.loadFiles({ files: arr });
         });
     }
 
     openFolder() {
         var dialog = remote.dialog,
-            self = this,
             filereg = RegExp("\.(?:" + this.audioExtensions.join('|') + ")$", "i");
         dialog.showOpenDialog({
             properties: ['openDirectory']
-        }, function (result) {
+        }, (result) => {
             var filelist, imglist, rootpath;
             rootpath = result[0];
-            fs.readdir(rootpath, function (err, files) {
+            fs.readdir(rootpath, (err, files) => {
                 var fullpath;
                 filelist = [];
                 imglist = [];
@@ -106,7 +104,7 @@ export default class PlaylistDialog {
                         imglist.push(fullpath);
                     }
                 });
-                self.loadFiles({ files: filelist, images: imglist });
+                this.loadFiles({ files: filelist, images: imglist });
             });
         });
     }

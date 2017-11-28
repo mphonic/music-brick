@@ -23,7 +23,7 @@ export default function PlayerControlLink(scope, element) {
         dist = goal - now;
         next = now + 0.25 * dist;
         who.scrollTop = next;
-        timer = setTimeout(function () {
+        animateScrollTimer = setTimeout(function () {
             animateScroll(next, goal, who);
         }, 10);
     }

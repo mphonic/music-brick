@@ -51,7 +51,7 @@
                         <span class="progress-container" 
                             ng-click="clientSeek($event)" 
                             ng-show="player.currentIndex === $index && player.nowPlaying">
-                            <span class="progress-bar" ng-style="{ width: player.progressPercent }">
+                            <span class="progress-bar" ng-style="{ width: player.progressPercent + '%' }">
                             </span>
                         </span>
                         <span class="track-info track-title" title="{{ item.tags.title }}">{{ item.tags.title }}</span>

@@ -1,42 +1,46 @@
 import howler from "howler";
 import arrToBase64 from "../helpers/arrToBase64.js";
 
+// "private" vars and methods
+const _getProgress = new WeakMap();
+const _startProgressTimer = new WeakMap();
+const _stopProgressTimer = new WeakMap();
+const _scope = new WeakMap();
+
 export default class Player {
 
     constructor($scope, $interval) {
+        var _timer;
         this.playlist = [];
         this.nowPlaying = null;
         this.currentIndex = 0;
         this.focusedItem = 0;
         this.currentImage = null;
         this.paused = false;
-        this.timer = null;
-        this.progressPercent = '0%';
-        this.$interval = $interval;
-        this.$scope = $scope;
-    }
+        this.progressPercent = 0;
 
-    getProgress() {
-        if (!this.nowPlaying) return 0;
-        var dur = this.nowPlaying.duration(),
-            seek = this.nowPlaying.seek();
-        if (dur === 0) return 0;
-        return seek / dur;
-    }
-
-    startProgressTimer() {
-        var self = this;
-        if (!this.timer) {
-            this.timer = this.$interval(function () {
-                var progress = self.getProgress();
-                self.progressPercent = (progress * 100) + '%';
-            }, 200);
-        }
-    }
-
-    stopProgressTimer() {
-        this.$interval.cancel(this.timer);
-        this.timer = null;
+        // No need to expose these to the view
+        _timer = null;
+        _getProgress.set(this, () => {
+            if (!this.nowPlaying) return 0;
+            var dur = this.nowPlaying.duration(),
+                seek = this.nowPlaying.seek();
+            if (dur === 0) return 0;
+            return seek / dur;
+        });
+        _startProgressTimer.set(this, () => {
+            if (!_timer) {
+                _timer = $interval(() => {
+                    var progress = _getProgress.get(this)();
+                    this.progressPercent = (progress * 100);
+                }, 200);
+            }
+        });
+        _stopProgressTimer.set(this, () => {
+            $interval.cancel(_timer);
+            _timer = null;
+        });
+        _scope.set(this, $scope);
     }
 
     play(index) {
@@ -46,13 +50,13 @@ export default class Player {
             item.howl = new Howl({
                 src: [item.path],
                 html5: true,
-                onend: function () {
-                    if (index < self.playlist.length - 1) {
-                        self.play(index + 1);
+                onend: () => {
+                    if (index < this.playlist.length - 1) {
+                        this.play(index + 1);
                     } else {
-                        self.stop();
-                        self.focusedItem = 0;
-                        self.$scope.$apply();
+                        this.stop();
+                        this.focusedItem = 0;
+                        _scope.get(this).$apply();
                     }
                 }
             });
@@ -74,19 +78,19 @@ export default class Player {
                 this.currentImage = '';
             }
         }
-        this.startProgressTimer();
+        _startProgressTimer.get(this)();
     }
 
     resume() {
         this.paused = false;
         this.nowPlaying.play();
-        this.startProgressTimer();
+        _startProgressTimer.get(this)();
     }
 
     pause() {
         this.paused = true;
         this.nowPlaying.pause();
-        this.stopProgressTimer();
+        _stopProgressTimer.get(this)();
     }
 
     togglePlayPause() {
@@ -106,8 +110,8 @@ export default class Player {
             this.nowPlaying.stop();
             this.nowPlaying = null;
             this.currentIndex = 0;
-            this.stopProgressTimer();
-            this.progressPercent = '0%';
+            _stopProgressTimer.get(this)();
+            this.progressPercent = 0;
         }
     }
 
@@ -132,7 +136,7 @@ export default class Player {
     seek(time) {
         if (this.nowPlaying) {
             this.nowPlaying.seek(time);
-            this.progressPercent = (this.getProgress() * 100) + '%';
+            this.progressPercent = _getProgress.get(this)() * 100;
         }
     }
 };
