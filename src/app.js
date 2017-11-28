@@ -14,9 +14,9 @@ const app = remote.app;
 const appDir = jetpack.cwd(app.getAppPath());
 
 import Player from "./features/player.controller.js";
-import PlaylistDialog from "./features/playlistdialog.service.js";
-import PlayerControl from "./features/playercontrol.controller.js";
-import PlayerControlLink from "./features/playercontrol.link.js";
+import PlaylistDialog from "./features/playlist-dialog.service.js";
+import PlayerControl from "./features/player-control.controller.js";
+import PlayerControlLink from "./features/player-control.link.js";
 
 export default angular.module('audiotron', [require('angular-animate')])
   .controller('Player', Player)
