@@ -1,9 +1,9 @@
-<div class="container">
+<div class="container" ng-click="pc.isFocused = true">
     <div id="msg-screen" ng-if="pc.screenMsg">
         <div id="msg-progress" ng-style="{ width: pc.percentFilesLoaded + '%' }"></div>
         <div id="msg-screen-msg">{{ pc.screenMsg }}</div>
     </div>
-    <div id="file-dialogs" ng-if="!player.playlist.length">
+    <div id="file-dialogs" ng-if="!pc.plr.playlist.length">
         <div ng-click="pc.openDialog('files')">
             <i class="ion-ios-paper-outline"></i>
             <br /> Open Files
@@ -18,20 +18,20 @@
         </div>
     </div>
 
-    <div id="player-container" ng-if="player.playlist.length">
-        <div id="player-cover" ng-click="player.togglePlayPause()">
-            <img ng-src="{{ player.currentImage }}" ng-if="player.currentImage" />
-            <i class="ion-disc" ng-if="!player.currentImage"></i>
+    <div id="player-container" ng-if="pc.plr.playlist.length">
+        <div id="player-cover" ng-click="pc.plr.togglePlayPause(pc.focusedItem)">
+            <img ng-src="{{ pc.plr.currentImage }}" ng-if="pc.plr.currentImage" />
+            <i class="ion-disc" ng-if="!pc.plr.currentImage"></i>
         </div>
         <div id="player-items">
 
             <div id="player-controls">
                 <a ng-class="{ 
-                    'ion-ios-play-outline': player.paused || !player.nowPlaying, 
-                    'ion-ios-pause-outline': player.nowPlaying && !player.paused
-                }" ng-click="player.togglePlayPause()"></a>
-                <a class="ion-ios-rewind-outline" ng-click="player.rw()"></a>
-                <a class="ion-ios-fastforward-outline" ng-click="player.ff()"></a>
+                    'ion-ios-play-outline': pc.plr.paused || !pc.plr.nowPlaying, 
+                    'ion-ios-pause-outline': pc.plr.nowPlaying && !pc.plr.paused
+                }" ng-click="pc.plr.togglePlayPause()"></a>
+                <a class="ion-ios-rewind-outline" ng-click="pc.plr.rw()"></a>
+                <a class="ion-ios-fastforward-outline" ng-click="pc.plr.ff()"></a>
                 <div id="playlist-mods">
                     <a class="ion-ios-paper-outline" ng-click="pc.openDialog('files')" title="Open File(s)"></a>
                     <a class="ion-ios-folder-outline" ng-click="pc.openDialog('folder')" title="Open Folder"></a>
@@ -48,20 +48,20 @@
             </div>
 
             <div id="playlist">
-                <ul as-sortable="pc.getSortListeners()" ng-model="player.playlist">
-                    <li ng-repeat="item in player.playlist" 
+                <ul as-sortable="pc.getSortListeners()" ng-model="pc.plr.playlist">
+                    <li ng-repeat="item in pc.plr.playlist" 
                         ng-class="{ 
-                            'playlist-playing': $index === player.currentIndex && player.nowPlaying, 
-                            'playlist-cued': $index === player.focusedItem 
+                            'playlist-playing': $index === pc.plr.currentIndex && pc.plr.nowPlaying, 
+                            'playlist-cued': $index === pc.focusedItem 
                         }" 
                         ng-click="pc.setFocusedItem($index, $event)"
-                        ng-dblclick="player.play($index)"
+                        ng-dblclick="pc.plr.play($index)"
                         as-sortable-item>
                         <div as-sortable-item-handle>
                             <span class="progress-container" 
                                 ng-click="clientSeek($event)" 
-                                ng-show="player.currentIndex === $index && player.nowPlaying">
-                                <span class="progress-bar" ng-style="{ width: player.progressPercent + '%' }">
+                                ng-show="pc.plr.currentIndex === $index && pc.plr.nowPlaying">
+                                <span class="progress-bar" ng-style="{ width: pc.plr.progressPercent + '%' }">
                                 </span>
                             </span>
                             <span class="track-info track-title" title="{{ item.tags.title }}">{{ item.tags.title }}</span>
@@ -75,7 +75,7 @@
         </div>
     </div>
 
-    <div id="saved-playlists" ng-show="pc.showPlaylistMenu">
+    <div id="saved-playlists" ng-if="pc.showPlaylistMenu">
         <div>
             <a href="#" ng-click="pc.showPlaylistMenu = false">
                 <i class="ion-ios-arrow-thin-left"></i>
@@ -94,11 +94,11 @@
         </ul>
     </div>
 
-    <div id="save-dialog" ng-show="pc.showPlaylistDialog">
+    <div id="save-dialog" ng-if="pc.showPlaylistDialog">
         <form name="savePlaylist" novalidate>
             <label for="playlist-name">Save playlist as</label>
             <input type="text" name="playlistName" id="playlistName" ng-model="pc.savePlaylistAs" required />
-            <div ng-show="savePlaylist.playlistName.$touched && savePlaylist.playlistName.$error.required">Please enter a name</div>
+            <div ng-if="pc.showPlaylistDialog && savePlaylist.playlistName.$touched && savePlaylist.playlistName.$error.required">Please enter a name</div>
             <button ng-click="pc.savePlaylist(pc.savePlaylistAs)" ng-disabled="savePlaylist.playlistName.$error.required">Save</button>
             <button ng-click="pc.showPlaylistDialog = false">Cancel</button>
         </form>

@@ -14,7 +14,6 @@ export default class Player {
         this.playlist = [];
         this.nowPlaying = null;
         this.currentIndex = 0;
-        this.focusedItem = 0;
         this.currentImage = null;
         this.paused = false;
         this.progressPercent = 0;
@@ -44,7 +43,8 @@ export default class Player {
     }
 
     play(index) {
-        var item = this.playlist[index];
+        var item = this.playlist[index],
+            scope = _scope.get(this);
         if (!item.howl) {
             item.howl = new Howl({
                 src: [item.path],
@@ -55,8 +55,7 @@ export default class Player {
                         this.play(index + 1);
                     } else {
                         this.stop();
-                        this.focusedItem = 0;
-                        _scope.get(this).$apply();
+                        scope.$apply();
                     }
                 }
             });
@@ -67,7 +66,7 @@ export default class Player {
         this.paused = false;
         this.nowPlaying = item.howl;
         this.currentIndex = index;
-        this.focusedItem = index;
+        scope.$broadcast('player-advance', { index: this.currentIndex });
         item.howl.play();
         if (item.tags.picture) {
             this.currentImage = "data:" + item.tags.picture.format + ";base64," + arrToBase64(item.tags.picture.data);
@@ -93,7 +92,7 @@ export default class Player {
         _stopProgressTimer.get(this)();
     }
 
-    togglePlayPause() {
+    togglePlayPause(item) {
         if (this.nowPlaying) {
             if (!this.paused) {
                 this.pause();
@@ -101,7 +100,7 @@ export default class Player {
                 this.resume();
             }
         } else {
-            this.play(this.focusedItem || 0);
+            this.play(item || 0);
         }
     }
 
@@ -112,6 +111,7 @@ export default class Player {
             this.currentIndex = 0;
             _stopProgressTimer.get(this)();
             this.progressPercent = 0;
+            _scope.get(this).$broadcast('player-advance', { index: this.currentIndex });
         }
     }
 

@@ -13,6 +13,7 @@ export default class PlayerControl {
         this.plr = $scope.player;
         this.percentFilesLoaded = 0;
         this.showPlaylistDialog = false;
+        this.isFocused = true;
 
         // broadcast from the PlaylistDialog service when files
         // are being loaded
@@ -20,6 +21,11 @@ export default class PlayerControl {
             this.screenMsg = 'Getting file information...';
             this.percentFilesLoaded = 100 * a.loaded / a.total;
             $scope.$apply();
+        });
+
+        // when playlist auto-advances, update focusedItem
+        $scope.$on('player-advance', (e, a) => {
+            this.focusedItem = a.index;
         });
 
         _pd.set(this, PlaylistDialog);
@@ -48,21 +54,21 @@ export default class PlayerControl {
         // handle keydown events
         $document.bind('keydown', (e) => {
             var isUsed = true, plr = this.plr;
-            if (this.showPlaylistDialog) return;
+            if (this.showPlaylistDialog || !this.isFocused) return;
 
             switch (e.keyCode) {
                 case 32:
                     plr.togglePlayPause();
                     break;
                 case 40:
-                    plr.focusedItem = Math.min(plr.focusedItem + 1, plr.playlist.length - 1);
+                    this.focusedItem = Math.min(this.focusedItem + 1, plr.playlist.length - 1);
                     break;
                 case 38:
-                    plr.focusedItem = Math.max(plr.focusedItem - 1, 0);
+                    this.focusedItem = Math.max(this.focusedItem - 1, 0);
                     break;
                 case 13:
-                    if (plr.focusedItem !== plr.currentIndex) {
-                        plr.play(plr.focusedItem);
+                    if (this.focusedItem !== plr.currentIndex) {
+                        plr.play(this.focusedItem);
                     }
                     break;
                 case 39:
@@ -99,7 +105,7 @@ export default class PlayerControl {
             this.playlistName = _store.get(this).get('playlistKeyMap.' + key);
             this.savePlaylistAs = (this.playlistName.toLowerCase() === 'default')?'':this.playlistName;
             plr.stop();
-            plr.focusedItem = 0;
+            this.focusedItem = 0;
         }
         this.showPlaylistMenu = false;
     }
@@ -172,18 +178,18 @@ export default class PlayerControl {
 
     setFocusedItem(index, e) {
         // if (e.shiftKey)
-        this.plr.focusedItem = index;
+        this.focusedItem = index;
     }
 
     removeFocusedItem(plr) {
         var index;
         plr = (plr)?plr:this.plr;
-        index = plr.focusedItem;
+        index = this.focusedItem;
         if (index === plr.currentIndex && plr.nowPlaying) {
             plr.stop();
         }
-        plr.playlist.splice(plr.focusedItem, 1);
-        plr.focusedItem = Math.min(index, plr.playlist.length - 1);
+        plr.playlist.splice(this.focusedItem, 1);
+        this.focusedItem = Math.min(index, plr.playlist.length - 1);
         if (plr.currentIndex > index) {
             plr.currentIndex = plr.currentIndex - 1;
         }
@@ -195,7 +201,7 @@ export default class PlayerControl {
             accept: function () { return true },
             orderChanged: (e) => {
                 var ci = this.plr.currentIndex,
-                    fi = this.plr.focusedItem,
+                    fi = this.focusedItem,
                     dest = e.dest.index,
                     source = e.source.index;
                 if (ci === source) {
@@ -207,11 +213,11 @@ export default class PlayerControl {
                 }
 
                 if (fi === source) {
-                    this.plr.focusedItem = dest;
+                    this.focusedItem = dest;
                 } else if (fi >= dest && fi < source) {
-                    this.plr.focusedItem++;
+                    this.focusedItem++;
                 } else if (fi <= dest && fi > source) {
-                    this.plr.focusedItem--;
+                    this.focusedItem--;
                 }
             },
             containment: '#playlist',
