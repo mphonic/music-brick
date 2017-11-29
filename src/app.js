@@ -21,8 +21,9 @@ import PlayerControlLink from "./features/player-control.link.js";
 import PlayerKeyMap from "./features/player-keymap.link.js";
 
 import assortable from "ng-sortable";
+import swipe from "angular-swipe";
 
-export default angular.module('audiotron', [require('angular-animate'), assortable])
+export default angular.module('audiotron', [require('angular-animate'), assortable, swipe.name])
   .controller('Player', Player)
   .service('PlaylistDialog', PlaylistDialog)
   .directive('playercontrol', function () {

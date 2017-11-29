@@ -56,6 +56,8 @@
                         }" 
                         ng-click="pc.setFocusedItem($index, $event)"
                         ng-dblclick="pc.plr.play($index)"
+                        ng-swipe-left="showDelete = $index"
+                        ng-swipe-right="showDelete = null"
                         as-sortable-item>
                         <div as-sortable-item-handle>
                             <span class="progress-container" 
@@ -67,6 +69,9 @@
                             <span class="track-info track-title" title="{{ item.tags.title }}">{{ item.tags.title }}</span>
                             <span class="track-info track-album" title="{{ item.tags.album }}">{{ item.tags.album }}</span>
                             <span class="track-info track-artist" title="{{ item.tags.artist }}">{{ item.tags.artist }}</span>
+                            <a href="#" class="delete-bar" ng-if="showDelete === $index" ng-click="pc.removePlaylistItem($index)">
+                                <span class="delete-bar-text">Remove?</span>
+                            </a>
                         </div>
                     </li>
                 </ul>
@@ -82,7 +87,9 @@
             </a>
         </div>
         <ul>
-            <li ng-repeat="item in pc.savedPlaylists | orderBy: 'name'">
+            <li ng-repeat="item in pc.savedPlaylists | orderBy: 'name'"
+                ng-swipe-left="showDelete = $index"
+                ng-swipe-right="showDelete = null">
                 <a href="#" class="load-playlist" ng-click="pc.loadPlaylist(item.key)">{{ item.name }}</a>
                 <a href="#" class="append-playlist" ng-click="pc.appendPlaylist(item.key)" title='Add "{{ item.name }}" to current playlist'>
                     <i class="ion-ios-plus-empty"></i>
@@ -90,6 +97,7 @@
                 <a href="#" class="delete-playlist" ng-click="pc.deletePlaylist(item.key)" title='Delete "{{ item.name }}"'>
                     <i class="ion-ios-close-empty"></i>
                 </a>
+                <a href="#" class="delete-bar" ng-if="showDelete === $index" ng-click="pc.deletePlaylist(item.key)"><span class="delete-bar-text">Delete?</span></a>
             </li>
         </ul>
     </div>
@@ -101,7 +109,7 @@
             </label>
             <div class="error" ng-if="pc.showPlaylistDialog && savePlaylist.playlistName.$touched && savePlaylist.playlistName.$error.required">Please enter a name</div>
             <button ng-click="pc.savePlaylist(pc.savePlaylistAs)" ng-disabled="savePlaylist.playlistName.$error.required">Save</button>
-            <button ng-click="pc.showPlaylistDialog = false">Cancel</button>
+            <button ng-click="savePlaylist.$setPristine(); pc.showPlaylistDialog = false">Cancel</button>
         </form>
     </div>
 </div>

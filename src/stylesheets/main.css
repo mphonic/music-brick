@@ -335,6 +335,40 @@ a {
   margin-right: 1.3em;
 }
 
+.delete-bar {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 72px;
+  height: 100%;
+  background: red;
+  z-index: 500;
+  transition: right 0.2s;
+}
+
+.delete-bar.ng-enter,
+.delete-bar.ng-leave-active {
+  right: -100%;
+}
+
+.delete-bar.ng-enter-active {
+  right: 0;
+}
+
+.delete-bar-text {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  padding: 0 6px;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-align: center;
+  transform: translateY(-50%);
+}
+
 .playlist {
   background: var(--playlist-bg);
   flex: 1 1 auto;

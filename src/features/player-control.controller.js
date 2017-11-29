@@ -145,16 +145,24 @@ export default class PlayerControl {
     }
 
     removeFocusedItem(plr) {
-        var index;
-        plr = (plr)?plr:this.plr;
+        var index = this.focusedItem,
+            plr = this.plr;
         index = this.focusedItem;
+        this.removePlaylistItem(index);
+        this.focusedItem = Math.min(index, plr.playlist.length - 1);
+    }
+
+    removePlaylistItem(index) {
+        var  plr = this.plr;
         if (index === plr.currentIndex && plr.nowPlaying) {
             plr.stop();
         }
-        plr.playlist.splice(this.focusedItem, 1);
-        this.focusedItem = Math.min(index, plr.playlist.length - 1);
+        plr.playlist.splice(index, 1);
         if (plr.currentIndex > index) {
-            plr.currentIndex = plr.currentIndex - 1;
+            plr.currentIndex--;
+        }
+        if (this.focusedItem > index) {
+            this.focusedItem--;
         }
     }
 
