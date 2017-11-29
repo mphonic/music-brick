@@ -1,4 +1,4 @@
-<div class="player-container" ng-click="pc.isFocused = true">
+<div class="player-container" playercontrol="pc" playerkeymap tabindex="0">
     <div class="msg-screen" ng-if="pc.screenMsg">
         <div class="msg-progress" ng-style="{ width: pc.percentFilesLoaded + '%' }"></div>
         <div class="msg-screen-msg">{{ pc.screenMsg }}</div>

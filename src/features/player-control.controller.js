@@ -9,11 +9,10 @@ const _sp = new WeakMap();
 
 export default class PlayerControl {
 
-    constructor($scope, $window, $document, PlaylistDialog) {
+    constructor($scope, $window, PlaylistDialog) {
         this.plr = $scope.player;
         this.percentFilesLoaded = 0;
         this.showPlaylistDialog = false;
-        this.isFocused = true;
 
         // broadcast from the PlaylistDialog service when files
         // are being loaded
@@ -50,57 +49,6 @@ export default class PlayerControl {
         this.savedPlaylists = this.getPlaylistKeyMap();
         // and save the default playlist when the app is closed
         $window.onbeforeunload = () => { _sp.get(this)('default', 'Default'); }
-
-        // handle keydown events
-        $document.bind('keydown', (e) => {
-            var isUsed = true, plr = this.plr;
-            if (this.showPlaylistDialog || !this.isFocused) return;
-
-            switch (e.keyCode) {
-                case 32:
-                    plr.togglePlayPause();
-                    break;
-                case 40:
-                    this.focusedItem = Math.min(this.focusedItem + 1, plr.playlist.length - 1);
-                    break;
-                case 38:
-                    this.focusedItem = Math.max(this.focusedItem - 1, 0);
-                    break;
-                case 13:
-                    if (this.focusedItem !== plr.currentIndex) {
-                        plr.play(this.focusedItem);
-                    }
-                    break;
-                case 39:
-                    plr.ff();
-                    break;
-                case 37:
-                    plr.rw();
-                    break;
-                case 8 || 46:
-                    this.removeFocusedItem(plr);
-                    break;
-                case 70:
-                    this.openDialog('files');
-                    break;
-                case 68:
-                    this.openDialog('folder');
-                    break;
-                case 83:
-                    this.showPlaylistDialog = !this.showPlaylistDialog;
-                    break;
-                case 80:
-                    this.showPlaylistMenu = !this.showPlaylistMenu;
-                    break;
-                case 67:
-                    this.clearPlaylist();
-                    break;
-                default:
-                    isUsed = false;
-            }
-            if (isUsed) e.preventDefault();
-            $scope.$apply();
-        });
     }
 
     loadPlaylist(key) {
