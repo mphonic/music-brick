@@ -40,7 +40,7 @@ body {
   cursor: not-allowed!important;
 }
 
-.container {
+.player-container {
   position: relative;
   width: 100%;
   height: 100%;
@@ -63,7 +63,7 @@ a {
   color: var(--main-text-color);
 }
 
-#msg-screen {
+.msg-screen {
   position: fixed;
   top: 0;
   left: 0;
@@ -74,7 +74,7 @@ a {
   z-index: 300;
 }
 
-#msg-screen-msg {
+.msg-screen-msg {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -84,7 +84,7 @@ a {
   z-index: 100;
 }
 
-#msg-progress {
+.msg-progress {
   position: absolute;
   top: 0;
   left: 0;
@@ -94,15 +94,27 @@ a {
   transition: width 0.2s;
 }
 
-#file-dialogs {
+.file-dialogs {
   display: flex;
   width: 100%;
   height: 100%;
   align-items: center;
   justify-content: center;
+  transition: left 0.183s;
 }
 
-#file-dialogs div {
+.file-dialogs.ng-enter,
+.file-dialogs.ng-leave-active {
+  position: absolute;
+  left: -100%;
+}
+
+.file-dialogs.ng-enter-active {
+  position: absolute;
+  left: 0;
+}
+
+.file-dialogs div {
   flex: 1 1 auto;
   width: 33.3333%;
   font-size: 3.3em;
@@ -114,11 +126,11 @@ a {
   transition: background 0.25s;
 }
 
-#file-dialogs div:hover {
+.file-dialogs div:hover {
   background: var(--playlist-hover-bg);
 }
 
-#player-container {
+.player-control-container {
   display: flex;
   position: relative;
   flex: auto;
@@ -126,9 +138,21 @@ a {
   height: 100%;
   align-items: center;
   justify-content: center;
+  transition: right 0.183s;
 }
 
-#player-cover {
+.player-control-container.ng-enter,
+.player-control-container.ng-leave-active {
+  position: absolute;
+  right: -100%;
+}
+
+.player-control-container.ng-enter-active {
+  position: absolute;
+  right: 0;
+}
+
+.player-cover {
   width: 40%;
   padding: 24px;
   background: var(--cover-bg);
@@ -137,18 +161,18 @@ a {
   overflow: hidden;
 }
 
-#player-cover img,
-#player-cover i {
+.player-cover img,
+.player-cover i {
   position: relative;
   display: block;
   margin: auto;
 }
 
-#player-cover i {
+.player-cover i {
   font-size: 12em;
 }
 
-#player-items {
+.player-items {
   display: flex;
   flex-direction: column;
   width: 60%;
@@ -156,13 +180,13 @@ a {
   background: var(--player-bg);
 }
 
-#player-controls {
+.player-controls {
   padding: 0 0.5em;
   height: 64px;
   line-height: 64px;
   background: var(--controls-bg);
 }
-#player-controls a {
+.player-controls a {
   display: block;
   float: left;
   text-decoration: none;
@@ -172,15 +196,15 @@ a {
   cursor: pointer;
 }
 
-#player-controls > a:first-child {
+.player-controls > a:first-child {
   font-size: 3.3em;
 }
 
-#playlist-mods {
+.playlist-mods {
   float: right;
 }
 
-#save-dialog {
+.save-dialog {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -191,20 +215,34 @@ a {
   transform: translate(-50%, -50%);
   box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.4);
   z-index: 300;
+  transition: opacity 0.2s;
 }
 
-#save-dialog label,
-#save-dialog input,
-#save-dialog .error {
+/* .save-dialog.ng-enter,
+.save-dialog.ng-leave-active {
+  opacity: 0;
+}
+
+.save-dialog.ng-enter-active {
+  opacity: 1;
+} */
+
+.save-dialog label,
+.save-dialog input,
+.save-dialog .error {
   display: block;
   margin: 0 auto 0.76em;
+}
+
+.save-dialog input {
+  margin-top: 0.76em;
 }
 
 .error {
   color: red;
 }
 
-#save-dialog input {
+.save-dialog input {
   width: 100%;
   padding: 6px 8px;
   color: #555;
@@ -215,7 +253,7 @@ a {
   box-shadow: inset 0px 1px 1px rgba(0,0,0,0.075);
 }
 
-#save-dialog button {
+.save-dialog button {
   display: inline-block;
   float: right;
   margin-left: 0.5em;
@@ -230,7 +268,7 @@ a {
   border-radius: 4px;
 }
 
-#saved-playlists {
+.saved-playlists {
   position: fixed;
   top: 0;
   right: 0;
@@ -243,24 +281,34 @@ a {
   box-shadow: -1px 0px 0px 1px rgba(0,0,0,0.4);
   overflow: auto;
   z-index: 300;
+  transition: right 0.2s;
 }
 
-#saved-playlists div {
+.saved-playlists.ng-enter,
+.saved-playlists.ng-leave-active {
+  right: -100%;
+}
+
+.saved-playlists.ng-enter-active {
+  right: 0;
+}
+
+.saved-playlists div {
   width: 100%;
   padding: 0 14px;
 }
 
-#saved-playlists div:first-child {
+.saved-playlists div:first-child {
   font-size: 1.5em;
   font-weight: bold;
   margin-bottom: 0.125em;
 }
 
-#saved-playlists ul {
+.saved-playlists ul {
   font-size: 14px;
 }
 
-#saved-playlists li {
+.saved-playlists li {
   position: relative;
 }
 
@@ -287,7 +335,7 @@ a {
   margin-right: 1.3em;
 }
 
-#playlist {
+.playlist {
   background: var(--playlist-bg);
   flex: 1 1 auto;
   overflow: auto;
@@ -299,8 +347,8 @@ ul {
   padding: 0;
 }
 
-#playlist li, 
-#playlist-labels {
+.playlist li, 
+.playlist-labels {
   position: relative;
   width: 100%;
   padding: 4px 15px 5px;
@@ -308,22 +356,22 @@ ul {
   border-left: 2px solid var(--playlist-bg);
 }
 
-#playlist li {
+.playlist li {
   color: var(--playlist-font-color);
   cursor: pointer;
 }
 
-#playlist li:hover {
+.playlist li:hover {
   background: var(--playlist-hover-bg);
 }
 
-#playlist li:after {
+.playlist li:after {
   content:'';
   display: table;
   clear: both;
 }
 
-#playlist-labels {
+.playlist-labels {
   font-weight: bold;
   color: var(--playlist-label-color);
   text-transform: uppercase;
@@ -335,13 +383,13 @@ ul {
   border: none;
 }
 
-#playlist .playlist-playing,
-#playlist .playlist-playing.playlist-cued {
+.playlist .playlist-playing,
+.playlist .playlist-playing.playlist-cued {
   background: var(--playlist-playing-bg);
   border-left: 2px solid var(--progress-bar-color);
 }
 
-#playlist .playlist-cued {
+.playlist .playlist-cued {
   background: var(--playlist-cued-bg);
   border-left: 2px solid var(--playlist-cued-border-color);
 }
@@ -382,11 +430,11 @@ ul {
   opacity: var(--progress-bar-opacity);
 }
 
-#playlist .as-sortable-item-handle {
+.playlist .as-sortable-item-handle {
   cursor: pointer;
 }
 
-#playlist .as-sortable-placeholder {
+.playlist .as-sortable-placeholder {
   cursor: move;
   border: 1px dotted;
   border-color: var(--playlist-label-color);
