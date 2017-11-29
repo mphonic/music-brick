@@ -98,7 +98,7 @@
         <form name="savePlaylist" novalidate>
             <label for="playlist-name">Save playlist as</label>
             <input type="text" name="playlistName" id="playlistName" ng-model="pc.savePlaylistAs" required />
-            <div ng-if="pc.showPlaylistDialog && savePlaylist.playlistName.$touched && savePlaylist.playlistName.$error.required">Please enter a name</div>
+            <div class="error" ng-if="pc.showPlaylistDialog && savePlaylist.playlistName.$touched && savePlaylist.playlistName.$error.required">Please enter a name</div>
             <button ng-click="pc.savePlaylist(pc.savePlaylistAs)" ng-disabled="savePlaylist.playlistName.$error.required">Save</button>
             <button ng-click="pc.showPlaylistDialog = false">Cancel</button>
         </form>

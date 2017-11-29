@@ -194,9 +194,14 @@ a {
 }
 
 #save-dialog label,
-#save-dialog input {
+#save-dialog input,
+#save-dialog .error {
   display: block;
   margin: 0 auto 0.76em;
+}
+
+.error {
+  color: red;
 }
 
 #save-dialog input {
@@ -230,7 +235,7 @@ a {
   top: 0;
   right: 0;
   height: 100%;
-  width: 183px;
+  width: 190px;
   padding: 7px 0;
   background: var(--main-bg);
   border-left: 2px solid;
@@ -261,7 +266,7 @@ a {
 
 .load-playlist {
   display: inline-block;
-  padding: 4px 14px;
+  padding: 4px 48px 4px 14px;
   width: 100%;
 }
 
