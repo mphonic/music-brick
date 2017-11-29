@@ -80,6 +80,21 @@ export default class PlayerControl {
                 case 8 || 46:
                     this.removeFocusedItem(plr);
                     break;
+                case 70:
+                    this.openDialog('files');
+                    break;
+                case 68:
+                    this.openDialog('folder');
+                    break;
+                case 83:
+                    this.showPlaylistDialog = !this.showPlaylistDialog;
+                    break;
+                case 80:
+                    this.showPlaylistMenu = !this.showPlaylistMenu;
+                    break;
+                case 67:
+                    this.clearPlaylist();
+                    break;
                 default:
                     isUsed = false;
             }
@@ -229,6 +244,7 @@ export default class PlayerControl {
     openDialog(type) {
         var promise = _pd.get(this).initiateFileDialog(type);
         promise.then((list) => {
+            if (list === 404) return;
             var plr = this.plr;
             if (list && list.length > 0) {
                 list.sort(function (a, b) {

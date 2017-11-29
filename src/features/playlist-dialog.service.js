@@ -74,6 +74,10 @@ export default class PlaylistDialog {
             properties: ['multiSelections'],
             filters: [{ name: 'Audio Files', extensions: this.audioExtensions }]
         }, (result) => {
+            if (!result) {
+                this.q.resolve(404);
+                return;
+            }
             var arr = [];
             angular.forEach(result, function (e, c) {
                 arr.push({ path: e });
@@ -88,6 +92,10 @@ export default class PlaylistDialog {
         dialog.showOpenDialog({
             properties: ['openDirectory']
         }, (result) => {
+            if (!result) {
+                this.q.resolve(404);
+                return;
+            }
             var filelist, imglist, rootpath;
             rootpath = result[0];
             fs.readdir(rootpath, (err, files) => {
