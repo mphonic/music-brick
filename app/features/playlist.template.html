@@ -83,8 +83,11 @@
         </div>
         <ul>
             <li ng-repeat="item in pc.savedPlaylists | orderBy: 'name'">
-                <a href="#" ng-click="pc.loadPlaylist(item.key)">{{ item.name }}</a>
-                <a href="#" ng-click="pc.deletePlaylist(item.key)" title='Delete "{{ item.name }}"'>
+                <a href="#" class="load-playlist" ng-click="pc.loadPlaylist(item.key)">{{ item.name }}</a>
+                <a href="#" class="append-playlist" ng-click="pc.appendPlaylist(item.key)" title='Add "{{ item.name }}" to current playlist'>
+                    <i class="ion-ios-plus-empty"></i>
+                </a>
+                <a href="#" class="delete-playlist" ng-click="pc.deletePlaylist(item.key)" title='Delete "{{ item.name }}"'>
                     <i class="ion-ios-close-empty"></i>
                 </a>
             </li>

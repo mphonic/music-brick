@@ -104,6 +104,14 @@ export default class PlayerControl {
         this.showPlaylistMenu = false;
     }
 
+    appendPlaylist(key) {
+        var pl = _store.get(this).get('playlists.' + key);
+        if (pl && pl.length) {
+            this.plr.playlist = this.plr.playlist.concat(pl);
+        }
+        this.showPlaylistMenu = false; 
+    }
+
     savePlaylist(name) {
         var key, existing, doIt = true;
         if (!name) {

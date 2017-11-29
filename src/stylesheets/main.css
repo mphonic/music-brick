@@ -258,23 +258,27 @@ a {
   position: relative;
 }
 
-#saved-playlists li a:first-child {
+.load-playlist {
   display: inline-block;
   padding: 4px 14px;
   width: 100%;
 }
 
-#saved-playlists li a:first-child:hover {
+.load-playlist:hover {
   background: var(--playlist-hover-bg);
 }
 
-#saved-playlists li a:last-child {
-  display: inline-block;
+.delete-playlist,
+.append-playlist {
   position: absolute;
   top: 50%;
   right: 14px;
   transform: translateY(-50%);
   z-index: 100;
+}
+
+.append-playlist {
+  margin-right: 1.3em;
 }
 
 #playlist {
@@ -323,15 +327,6 @@ ul {
   color: var(--playlist-label-color);
   background: var(--playlist-label-bg);
   border: none;
-}
-
-#playlist-labels::after {
-    content:"";
-    position:absolute;
-    width:100%;
-    bottom:1px;
-    left: 0;
-    z-index: 200;
 }
 
 #playlist .playlist-playing,
