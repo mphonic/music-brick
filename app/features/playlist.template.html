@@ -1,9 +1,9 @@
 <div class="container">
-    <div id="msg-screen" ng-show="pc.screenMsg">
+    <div id="msg-screen" ng-if="pc.screenMsg">
         <div id="msg-progress" ng-style="{ width: pc.percentFilesLoaded + '%' }"></div>
         <div id="msg-screen-msg">{{ pc.screenMsg }}</div>
     </div>
-    <div id="file-dialogs" ng-hide="player.playlist.length">
+    <div id="file-dialogs" ng-if="!player.playlist.length">
         <div ng-click="pc.openDialog('files')">
             <i class="ion-ios-paper-outline"></i>
             <br /> Open Files
@@ -18,10 +18,10 @@
         </div>
     </div>
 
-    <div id="player-container" ng-show="player.playlist.length">
+    <div id="player-container" ng-if="player.playlist.length">
         <div id="player-cover" ng-click="player.togglePlayPause()">
-            <img ng-src="{{ player.currentImage }}" ng-show="player.currentImage" />
-            <i class="ion-disc" ng-show="!player.currentImage"></i>
+            <img ng-src="{{ player.currentImage }}" ng-if="player.currentImage" />
+            <i class="ion-disc" ng-if="!player.currentImage"></i>
         </div>
         <div id="player-items">
 
