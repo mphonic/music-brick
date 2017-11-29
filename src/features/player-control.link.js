@@ -49,38 +49,4 @@ export default function PlayerControlLink(scope, element) {
             animateScroll(pl.scrollTop, scrollTo, pl);
         }
     });
-
-    angular.element(document.querySelector('html')).bind('keydown', function (e) {
-        var isUsed = true;
-        // console.log(e.keyCode);
-        switch (e.keyCode) {
-            case 32:
-                player.togglePlayPause();
-                break;
-            case 40:
-                player.focusedItem = Math.min(player.focusedItem + 1, player.playlist.length - 1);
-                break;
-            case 38:
-                player.focusedItem = Math.max(player.focusedItem - 1, 0);
-                break;
-            case 13:
-                if (player.focusedItem !== scope.currentIndex) {
-                    player.play(player.focusedItem);
-                }
-                break;
-            case 39:
-                player.ff();
-                break;
-            case 37:
-                player.rw();
-                break;
-            case 8 || 46:
-                scope.removeFocusedItem(player);
-                break;
-            default:
-                isUsed = false;
-        }
-        if (isUsed) e.preventDefault();
-        scope.$apply();
-    });
 }

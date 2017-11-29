@@ -12,7 +12,12 @@
             <i class="ion-ios-folder-outline"></i>
             <br /> Open Folder
         </div>
+        <div ng-click="pc.showPlaylistMenu = !pc.showPlaylistMenu" ng-if="pc.savedPlaylists.length">
+            <i class="ion-ios-list-outline"></i>
+            <br /> Open Playlist
+        </div>
     </div>
+
     <div id="player-container" ng-show="player.playlist.length">
         <div id="player-cover" ng-click="player.togglePlayPause()">
             <img ng-src="{{ player.currentImage }}" ng-show="player.currentImage" />
@@ -30,9 +35,12 @@
                 <div id="playlist-mods">
                     <a class="ion-ios-paper-outline" ng-click="pc.openDialog('files')" title="Open File(s)"></a>
                     <a class="ion-ios-folder-outline" ng-click="pc.openDialog('folder')" title="Open Folder"></a>
+                    <a class="ion-ios-plus-empty" ng-click="pc.showPlaylistDialog = true" title="Save Playlist"></a>
+                    <a class="ion-ios-list-outline" ng-click="pc.showPlaylistMenu = !pc.showPlaylistMenu" ng-if="pc.savedPlaylists.length" title="Open Playlist"></a>
                     <a class="ion-ios-close-outline" ng-click="pc.clearPlaylist()" title="Clear Playlist"></a>
                 </div>
             </div>
+
             <div id="playlist-labels">
                 <span class="track-header track-title">Title</span>
                 <span class="track-header track-album">Album</span>
@@ -40,7 +48,7 @@
             </div>
 
             <div id="playlist">
-                <ul as-sortable="pc.sortListeners" ng-model="player.playlist">
+                <ul as-sortable="pc.getSortListeners()" ng-model="player.playlist">
                     <li ng-repeat="item in player.playlist" 
                         ng-class="{ 
                             'playlist-playing': $index === player.currentIndex && player.nowPlaying, 
@@ -65,5 +73,31 @@
             </div>
 
         </div>
+    </div>
+
+    <div id="saved-playlists" ng-show="pc.showPlaylistMenu">
+        <div>
+            <a href="#" ng-click="pc.showPlaylistMenu = false">
+                <i class="ion-ios-arrow-thin-left"></i>
+            </a>
+        </div>
+        <ul>
+            <li ng-repeat="item in pc.savedPlaylists | orderBy: 'name'">
+                <a href="#" ng-click="pc.loadPlaylist(item.key)">{{ item.name }}</a>
+                <a href="#" ng-click="pc.deletePlaylist(item.key)" title='Delete "{{ item.name }}"'>
+                    <i class="ion-ios-close-empty"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div id="save-dialog" ng-show="pc.showPlaylistDialog">
+        <form name="savePlaylist" novalidate>
+            <label for="playlist-name">Save playlist as</label>
+            <input type="text" name="playlistName" id="playlistName" ng-model="pc.savePlaylistAs" required />
+            <div ng-show="savePlaylist.playlistName.$touched && savePlaylist.playlistName.$error.required">Please enter a name</div>
+            <button ng-click="pc.savePlaylist(pc.savePlaylistAs)" ng-disabled="savePlaylist.playlistName.$error.required">Save</button>
+            <button ng-click="pc.showPlaylistDialog = false">Cancel</button>
+        </form>
     </div>
 </div>
