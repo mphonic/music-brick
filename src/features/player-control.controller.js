@@ -141,6 +141,7 @@ export default class PlayerControl {
 
     setFocusedItem(index, e) {
         // if (e.shiftKey)
+        alert(e.which);
         this.focusedItem = index;
     }
 
