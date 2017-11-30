@@ -114,8 +114,8 @@ export default class Player {
         this.paused = false;
         this.nowPlaying = item.howl;
         this.currentIndex = index;
-        this.displayIndex = (this.random)?ri:index;
-        scope.$broadcast('player-advance', { index: this.displayIndex });
+        this.playingIndex = (this.random)?ri:index;
+        scope.$broadcast('player-advance', { index: this.playingIndex });
         item.howl.play();
         if (item.tags.picture) {
             this.currentImage = "data:" + item.tags.picture.format + ";base64," + arrToBase64(item.tags.picture.data);
@@ -206,21 +206,21 @@ export default class Player {
         if (this.currentIndex > index) {
             this.currentIndex--;
         }
-        if (this.displayIndex > index) {
-            this.displayIndex--;
+        if (this.playingIndex > index) {
+            this.playingIndex--;
         }
     }
 
     respondToOrderChange(dest, source) {
         var same = true;
-        if (this.currentIndex !== this.displayIndex) {
+        if (this.currentIndex !== this.playingIndex) {
             same = false;
-            if (this.displayIndex === source) {
-                this.displayIndex = dest;
-            } else if (this.displayIndex >= dest && this.displayIndex < source) {
-                this.displayIndex++;
-            } else if (this.displayIndex <= dest && this.displayIndex > source) {
-                this.displayIndex--;
+            if (this.playingIndex === source) {
+                this.playingIndex = dest;
+            } else if (this.playingIndex >= dest && this.playingIndex < source) {
+                this.playingIndex++;
+            } else if (this.playingIndex <= dest && this.playingIndex > source) {
+                this.playingIndex--;
             }
         }
         if (this.currentIndex === source) {
@@ -230,6 +230,6 @@ export default class Player {
         } else if (this.currentIndex <= dest && this.currentIndex > source) {
             this.currentIndex--;
         }
-        if (same) this.displayIndex = this.currentIndex;
+        if (same) this.playingIndex = this.currentIndex;
     }
 };

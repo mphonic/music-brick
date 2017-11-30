@@ -64,7 +64,7 @@
                 <ul as-sortable="pc.getSortListeners()" ng-model="pc.plr.playlist">
                     <li ng-repeat="item in pc.plr.playlist" 
                         ng-class="{ 
-                            'playlist-playing': $index === pc.plr.displayIndex && pc.plr.nowPlaying, 
+                            'playlist-playing': $index === pc.plr.playingIndex && pc.plr.nowPlaying, 
                             'playlist-cued': $index === pc.focusedItem 
                         }" 
                         ng-click="pc.setFocusedItem($index, $event)"
@@ -73,7 +73,7 @@
                         <div as-sortable-item-handle>
                             <span class="progress-container" 
                                 ng-click="clientSeek($event)" 
-                                ng-show="pc.plr.displayIndex === $index && pc.plr.nowPlaying">
+                                ng-show="pc.plr.playingIndex === $index && pc.plr.nowPlaying">
                                 <span class="progress-bar" ng-style="{ width: pc.plr.progressPercent + '%' }">
                                 </span>
                             </span>

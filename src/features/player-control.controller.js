@@ -5,6 +5,7 @@ import arrToBase64 from "../helpers/arrToBase64.js";
 const _store = new WeakMap();
 
 const _pd = new WeakMap();
+const _handleLoadPromise = new WeakMap();
 const _sp = new WeakMap();
 const _scope = new WeakMap();
 
@@ -29,9 +30,46 @@ export default class PlayerControl {
             this.setFocusedItem(a.index);
         });
 
+        // when files are dragged into the window
+        $scope.$on('drag-received', (e, data) => {
+            this.handleDragReceived(data);
+        });
+
         _scope.set(this, $scope);
 
         _pd.set(this, PlaylistDialog);
+
+        _handleLoadPromise.set(this, (promise) => {
+            promise.then((list) => {
+                if (list === 404) return;
+                var plr = this.plr;
+                if (list && list.length > 0) {
+                    list.sort(function (a, b) {
+                        if (a.tags.track < b.tags.track) return -1;
+                        if (a.tags.track > b.tags.track) return 1;
+                        return 0;
+                    });
+                    if (plr.playlist.length < 1) {
+                        if (list[0].tags.picture) {
+                            plr.currentImage = "data:" + list[0].tags.picture.format + ";base64," + arrToBase64(list[0].tags.picture.data);
+                        } else {
+                            if (list[0].images && list[0].images.length) {
+                                plr.currentImage = list[0].images[0];
+                            } else {
+                                plr.currentImage = '';
+                            }
+                        }
+                    }
+                    plr.appendToPlaylist(list);
+                    this.screenMsg = false;
+                    this.percentFilesLoaded = 0;
+                } else {
+                    alert("Some items lacked audio file content.");
+                }
+            }, function (err) {
+                alert(err);
+            });
+        });
 
         _store.set(this, new Store());
         // function to save a playlist based on a "sanitized" key
@@ -186,42 +224,32 @@ export default class PlayerControl {
                     this.setFocusedItem(this.focusedItem - 1);
                 }
             },
-            containment: '#playlist',
+            containment: '.playlist',
             clone: false,
             allowDuplicates: false,
         }
     }
 
+    handleDragReceived(data) {
+        var promise, 
+            folders = [], 
+            files = [];
+        angular.forEach(data.files, (e, c) => {
+            if (!e.type) {
+                promise = _pd.get(this).loadFolderContent(e.path, true);
+                _handleLoadPromise.get(this)(promise);
+            } else {
+                files.push(e);
+            }
+        });
+        if (files.length) {
+            promise = _pd.get(this).openFileList(files);
+            _handleLoadPromise.get(this)(promise);
+        }
+    }
+
     openDialog(type) {
         var promise = _pd.get(this).initiateFileDialog(type);
-        promise.then((list) => {
-            if (list === 404) return;
-            var plr = this.plr;
-            if (list && list.length > 0) {
-                list.sort(function (a, b) {
-                    if (a.tags.track < b.tags.track) return -1;
-                    if (a.tags.track > b.tags.track) return 1;
-                    return 0;
-                });
-                if (plr.playlist.length < 1) {
-                    if (list[0].tags.picture) {
-                        plr.currentImage = "data:" + list[0].tags.picture.format + ";base64," + arrToBase64(list[0].tags.picture.data);
-                    } else {
-                        if (list[0].images && list[0].images.length) {
-                            plr.currentImage = list[0].images[0];
-                        } else {
-                            plr.currentImage = '';
-                        }
-                    }
-                }
-                plr.appendToPlaylist(list);
-                this.screenMsg = false;
-                this.percentFilesLoaded = 0;
-            } else {
-                alert("No valid audio files found.");
-            }
-        }, function(err) {
-            alert(err);
-        });
+        _handleLoadPromise.get(this)(promise);
     }
 }

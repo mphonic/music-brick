@@ -49,4 +49,15 @@ export default function PlayerControlLink(scope, element) {
             animateScroll(pl.scrollTop, scrollTo, pl);
         }
     });
+
+    element.bind('dragenter dragover', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+
+    element.bind('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        scope.$broadcast('drag-received', e.dataTransfer);
+    });
 }

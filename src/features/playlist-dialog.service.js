@@ -68,6 +68,43 @@ export default class PlaylistDialog {
         });
     }
 
+    openFileList(list) {
+        var arr = [];
+        this.q = this.$q.defer();
+        angular.forEach(list, (e, c) => {
+            console.log(e);
+            if (this.isValidAudioFile(e.path)) {
+                arr.push({ path: e.path });
+            }
+        });
+        if (!arr.length) return;
+        this.loadFiles({ files: arr });
+        return this.q.promise;
+    }
+
+    loadFolderContent(folderpath, returnPromise) {
+        var filelist, imglist, rootpath;
+        rootpath = folderpath;
+        if (returnPromise) this.q = this.$q.defer();
+        fs.readdir(rootpath, (err, files) => {
+            var fullpath;
+            filelist = [];
+            imglist = [];
+            angular.forEach(files, (e, c) => {
+                var item = {};
+                fullpath = path.join(rootpath, e);
+                if (this.isValidAudioFile(e)) {
+                    item.path = fullpath;
+                    filelist.push(item);
+                } else if (this.isImageFile(e)) {
+                    imglist.push(fullpath);
+                }
+            });
+            this.loadFiles({ files: filelist, images: imglist });
+        });
+        if (returnPromise) return this.q.promise;
+    }
+
     openFiles() {
         var dialog = remote.dialog;
         dialog.showOpenDialog({
@@ -87,8 +124,7 @@ export default class PlaylistDialog {
     }
 
     openFolder() {
-        var dialog = remote.dialog,
-            filereg = RegExp("\.(?:" + this.audioExtensions.join('|') + ")$", "i");
+        var dialog = remote.dialog;
         dialog.showOpenDialog({
             properties: ['openDirectory']
         }, (result) => {
@@ -96,30 +132,13 @@ export default class PlaylistDialog {
                 this.q.resolve(404);
                 return;
             }
-            var filelist, imglist, rootpath;
-            rootpath = result[0];
-            fs.readdir(rootpath, (err, files) => {
-                var fullpath;
-                filelist = [];
-                imglist = [];
-                angular.forEach(files, function (e, c) {
-                    var item = {};
-                    fullpath = path.join(rootpath, e);
-                    if (e.match(filereg)) {
-                        item.path = fullpath;
-                        filelist.push(item);
-                    } else if (e.match(/\.(?:png|jpg|jpeg|gif)$/i)) {
-                        imglist.push(fullpath);
-                    }
-                });
-                this.loadFiles({ files: filelist, images: imglist });
-            });
+            this.loadFolderContent(result[0]);
         });
     }
 
     loadFiles(data) {
         if (!data.files || !data.files.length) {
-            this.q.reject('No valid audio files found.');
+            this.q.reject('Some items lacked audio file content.');
             return;
         }
         this.tmplist = [];
@@ -127,5 +146,14 @@ export default class PlaylistDialog {
         this.totalFilesToLoad = data.files.length;
         this.filesLoaded = 0;
         this.processLoadedFiles(data.files, 0, data.files.length - 1);
+    }
+
+    isValidAudioFile(path) {
+        var filereg = RegExp("\.(?:" + this.audioExtensions.join('|') + ")$", "i");
+        return path.match(filereg);
+    }
+
+    isImageFile(path) {
+        return path.match(/\.(?:png|jpg|jpeg|gif)$/i);
     }
 }
