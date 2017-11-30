@@ -188,6 +188,7 @@ a {
 }
 .player-controls a {
   display: block;
+  position: relative;
   float: left;
   text-decoration: none;
   color: var(--controls-font-color);
@@ -200,6 +201,21 @@ a {
   font-size: 3.3em;
 }
 
+a.player-repeat {
+  font-size: 1.3em;
+}
+
+.loop-one::after {
+  display: block;
+  content: '1';
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  margin-left: -3px;
+  font-size: 10px;
+  transform: translateY(-50%);
+}
 .playlist-mods {
   float: right;
 }

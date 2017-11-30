@@ -25,8 +25,8 @@ export default function PlayerControlLink(scope, element) {
         }, 10);
     }
 
-    scope.$watch('player.focusedItem', function(nv, ov) {
-        var el = document.querySelectorAll('#playlist li')[player.focusedItem],
+    scope.$on('focused-item', function(e, index) {
+        var el = document.querySelectorAll('.playlist li')[index],
             top,
             bottom,
             winHeight,
@@ -37,7 +37,7 @@ export default function PlayerControlLink(scope, element) {
         top = el.getBoundingClientRect().top;
         bottom = el.getBoundingClientRect().bottom;
         winHeight = window.innerHeight;
-        pl = document.getElementById('playlist');
+        pl = document.querySelectorAll('.playlist')[0];
         plTop = pl.getBoundingClientRect().top;
         if (bottom > winHeight) {
             scrollTo = bottom - plTop + pl.scrollTop + el.offsetHeight - pl.offsetHeight;

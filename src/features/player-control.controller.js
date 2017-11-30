@@ -6,6 +6,7 @@ const _store = new WeakMap();
 
 const _pd = new WeakMap();
 const _sp = new WeakMap();
+const _scope = new WeakMap();
 
 export default class PlayerControl {
 
@@ -13,6 +14,7 @@ export default class PlayerControl {
         this.plr = $scope.player;
         this.percentFilesLoaded = 0;
         this.showPlaylistDialog = false;
+        this.focusedItem = 0;
 
         // broadcast from the PlaylistDialog service when files
         // are being loaded
@@ -24,8 +26,10 @@ export default class PlayerControl {
 
         // when playlist auto-advances, update focusedItem
         $scope.$on('player-advance', (e, a) => {
-            this.focusedItem = a.index;
+            this.setFocusedItem(a.index);
         });
+
+        _scope.set(this, $scope);
 
         _pd.set(this, PlaylistDialog);
 
@@ -68,7 +72,7 @@ export default class PlayerControl {
             this.playlistName = _store.get(this).get('playlistKeyMap.' + key);
             this.savePlaylistAs = (this.playlistName.toLowerCase() === 'default')?'':this.playlistName;
             plr.stop();
-            this.focusedItem = 0;
+            this.setFocusedItem(0);
         }
         this.showPlaylistMenu = false;
     }
@@ -139,9 +143,9 @@ export default class PlayerControl {
         this.plr.playlist = [];
     }
 
-    setFocusedItem(index, e) {
-        // if (e.shiftKey)
+    setFocusedItem(index) {
         this.focusedItem = index;
+        _scope.get(this).$broadcast('focused-item', this.focusedItem);
     }
 
     removeFocusedItem(plr) {
@@ -149,7 +153,7 @@ export default class PlayerControl {
             plr = this.plr;
         index = this.focusedItem;
         this.removePlaylistItem(index);
-        this.focusedItem = Math.min(index, plr.playlist.length - 1);
+        this.setFocusedItem(Math.min(index, plr.playlist.length - 1));
     }
 
     removePlaylistItem(index) {
@@ -184,11 +188,11 @@ export default class PlayerControl {
                 }
 
                 if (fi === source) {
-                    this.focusedItem = dest;
+                    this.setFocusedItem(dest);
                 } else if (fi >= dest && fi < source) {
-                    this.focusedItem++;
+                    this.setFocusedItem(this.focusedItem + 1);
                 } else if (fi <= dest && fi > source) {
-                    this.focusedItem--;
+                    this.setFocusedItem(this.focusedItem - 1);
                 }
             },
             containment: '#playlist',

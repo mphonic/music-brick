@@ -5,6 +5,7 @@ import arrToBase64 from "../helpers/arrToBase64.js";
 const _getProgress = new WeakMap();
 const _startProgressTimer = new WeakMap();
 const _stopProgressTimer = new WeakMap();
+const _endAction = new WeakMap();
 const _scope = new WeakMap();
 
 export default class Player {
@@ -17,6 +18,8 @@ export default class Player {
         this.currentImage = null;
         this.paused = false;
         this.progressPercent = 0;
+        this.repeatMode = 0;
+        this.random = false;
 
         // No need to expose these to the view
         _timer = null;
@@ -39,6 +42,22 @@ export default class Player {
             $interval.cancel(_timer);
             _timer = null;
         });
+
+        _endAction.set(this, () => {
+            var index = this.currentIndex;
+            if (this.repeatMode === 2) {
+                this.play(index);
+                return;
+            }
+            if (index < this.playlist.length - 1) {
+                this.play(index + 1);
+            } else if (this.repeatMode) {
+                this.play(0);
+            } else {
+                this.stop();
+            }
+        });
+
         _scope.set(this, $scope);
     }
 
@@ -50,13 +69,8 @@ export default class Player {
                 src: [item.path],
                 html5: true,
                 onend: () => {
-                    var index = this.currentIndex;
-                    if (index < this.playlist.length - 1) {
-                        this.play(index + 1);
-                    } else {
-                        this.stop();
-                        scope.$apply();
-                    }
+                    _endAction.get(this)();
+                    scope.$apply();
                 }
             });
         }

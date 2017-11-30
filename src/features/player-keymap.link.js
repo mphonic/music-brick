@@ -10,10 +10,10 @@ export default function PlayerKeyMap(scope, element, attrs) {
                     plr.togglePlayPause();
                     break;
                 case 40:
-                    pc.focusedItem = Math.min(pc.focusedItem + 1, plr.playlist.length - 1);
+                    pc.setFocusedItem(Math.min(pc.focusedItem + 1, plr.playlist.length - 1));
                     break;
                 case 38:
-                    pc.focusedItem = Math.max(pc.focusedItem - 1, 0);
+                    pc.setFocusedItem(Math.max(pc.focusedItem - 1, 0));
                     break;
                 case 13:
                     if (pc.focusedItem !== plr.currentIndex) {
