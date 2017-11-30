@@ -201,7 +201,7 @@ a {
   font-size: 3.3em;
 }
 
-a.player-repeat {
+a.playback-mod {
   font-size: 1.3em;
 }
 
@@ -216,6 +216,11 @@ a.player-repeat {
   font-size: 10px;
   transform: translateY(-50%);
 }
+
+.mod-off {
+  opacity: 0.5;
+}
+
 .playlist-mods {
   float: right;
 }

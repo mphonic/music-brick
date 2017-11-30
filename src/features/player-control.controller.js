@@ -59,7 +59,7 @@ export default class PlayerControl {
         var pl = _store.get(this).get('playlists.' + key);
         if (pl && pl.length) {
             var plr = this.plr;
-            plr.playlist = pl;
+            plr.setPlaylist(pl);
             if (pl[0].tags.picture) {
                 plr.currentImage = "data:" + pl[0].tags.picture.format + ";base64," + arrToBase64(pl[0].tags.picture.data);
             } else {
@@ -140,7 +140,7 @@ export default class PlayerControl {
 
     clearPlaylist() {
         this.plr.stop();
-        this.plr.playlist = [];
+        this.plr.setPlaylist([]);
     }
 
     setFocusedItem(index) {
@@ -161,10 +161,7 @@ export default class PlayerControl {
         if (index === plr.currentIndex && plr.nowPlaying) {
             plr.stop();
         }
-        plr.playlist.splice(index, 1);
-        if (plr.currentIndex > index) {
-            plr.currentIndex--;
-        }
+        plr.removeFromPlaylist(index);
         if (this.focusedItem > index) {
             this.focusedItem--;
         }
@@ -175,17 +172,11 @@ export default class PlayerControl {
         return {
             accept: function () { return true },
             orderChanged: (e) => {
-                var ci = this.plr.currentIndex,
-                    fi = this.focusedItem,
+                var fi = this.focusedItem,
                     dest = e.dest.index,
                     source = e.source.index;
-                if (ci === source) {
-                    this.plr.currentIndex = dest;
-                } else if (ci >= dest && ci < source) {
-                    this.plr.currentIndex++;
-                } else if (ci <= dest && ci > source) {
-                    this.plr.currentIndex--;
-                }
+                    
+                this.plr.respondToOrderChange(dest, source);
 
                 if (fi === source) {
                     this.setFocusedItem(dest);
@@ -223,7 +214,7 @@ export default class PlayerControl {
                         }
                     }
                 }
-                plr.playlist = plr.playlist.concat(list);
+                plr.appendToPlaylist(list);
                 this.screenMsg = false;
                 this.percentFilesLoaded = 0;
             } else {

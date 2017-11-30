@@ -5,7 +5,9 @@ import arrToBase64 from "../helpers/arrToBase64.js";
 const _getProgress = new WeakMap();
 const _startProgressTimer = new WeakMap();
 const _stopProgressTimer = new WeakMap();
-const _endAction = new WeakMap();
+const _nextAction = new WeakMap();
+const _randomOrder = new WeakMap();
+const _getShuffledList = new WeakMap();
 const _scope = new WeakMap();
 
 export default class Player {
@@ -43,7 +45,29 @@ export default class Player {
             _timer = null;
         });
 
-        _endAction.set(this, () => {
+        _randomOrder.set(this, []);
+        _getShuffledList.set(this, (list) => {
+            var arr = [],
+                curIndex = list.length,
+                tempVal,
+                randomIndex;
+            for (var i = 0; i < list.length; i++) {
+                arr.push(i);
+            }
+            // While there remain elements to shuffle...
+            while (0 !== curIndex) {
+
+                randomIndex = Math.floor(Math.random() * curIndex);
+                curIndex -= 1;
+
+                tempVal = arr[curIndex];
+                arr[curIndex] = arr[randomIndex];
+                arr[randomIndex] = tempVal;
+            }
+            return arr;
+        });
+
+        _nextAction.set(this, () => {
             var index = this.currentIndex;
             if (this.repeatMode === 2) {
                 this.play(index);
@@ -51,10 +75,13 @@ export default class Player {
             }
             if (index < this.playlist.length - 1) {
                 this.play(index + 1);
-            } else if (this.repeatMode) {
-                this.play(0);
             } else {
-                this.stop();
+                if (this.repeatMode) {
+                    this.play(0);   
+                } else {
+                    this.stop();
+                }
+                _randomOrder.set(this, _getShuffledList.get(this)(this.playlist));
             }
         });
 
@@ -62,14 +89,21 @@ export default class Player {
     }
 
     play(index) {
-        var item = this.playlist[index],
+        var item,
+            ri,
             scope = _scope.get(this);
+        if (!this.random) {
+            item = this.playlist[index];
+        } else {
+            ri = _randomOrder.get(this)[index];
+            item = this.playlist[ri];
+        }
         if (!item.howl) {
             item.howl = new Howl({
                 src: [item.path],
                 html5: true,
                 onend: () => {
-                    _endAction.get(this)();
+                    _nextAction.get(this)();
                     scope.$apply();
                 }
             });
@@ -80,7 +114,8 @@ export default class Player {
         this.paused = false;
         this.nowPlaying = item.howl;
         this.currentIndex = index;
-        scope.$broadcast('player-advance', { index: this.currentIndex });
+        this.displayIndex = (this.random)?ri:index;
+        scope.$broadcast('player-advance', { index: this.displayIndex });
         item.howl.play();
         if (item.tags.picture) {
             this.currentImage = "data:" + item.tags.picture.format + ";base64," + arrToBase64(item.tags.picture.data);
@@ -141,9 +176,7 @@ export default class Player {
 
     ff() {
         if (this.nowPlaying) {
-            if (this.currentIndex < this.playlist.length - 1) {
-                this.play(this.currentIndex + 1);
-            }
+            _nextAction.get(this)();
         }
     }
 
@@ -152,5 +185,51 @@ export default class Player {
             this.nowPlaying.seek(time);
             this.progressPercent = _getProgress.get(this)() * 100;
         }
+    }
+
+    setPlaylist(list) {
+        this.playlist = list;
+        _randomOrder.set(this, _getShuffledList.get(this)(list));
+    }
+
+    appendToPlaylist(list) {
+        var ro = _randomOrder.get(this);
+        this.playlist = this.playlist.concat(list);
+        _randomOrder.set(this, ro.concat(_getShuffledList.get(this)(list)));
+    }
+
+    removeFromPlaylist(index) {
+        var ro = _randomOrder.get(this),
+            randomIndex = ro.indexOf(index);
+        this.playlist.splice(index, 1);
+        ro.splice(randomIndex, 1);
+        if (this.currentIndex > index) {
+            this.currentIndex--;
+        }
+        if (this.displayIndex > index) {
+            this.displayIndex--;
+        }
+    }
+
+    respondToOrderChange(dest, source) {
+        var same = true;
+        if (this.currentIndex !== this.displayIndex) {
+            same = false;
+            if (this.displayIndex === source) {
+                this.displayIndex = dest;
+            } else if (this.displayIndex >= dest && this.displayIndex < source) {
+                this.displayIndex++;
+            } else if (this.displayIndex <= dest && this.displayIndex > source) {
+                this.displayIndex--;
+            }
+        }
+        if (this.currentIndex === source) {
+            this.currentIndex = dest;
+        } else if (this.currentIndex >= dest && this.currentIndex < source) {
+            this.currentIndex++;
+        } else if (this.currentIndex <= dest && this.currentIndex > source) {
+            this.currentIndex--;
+        }
+        if (same) this.displayIndex = this.currentIndex;
     }
 };

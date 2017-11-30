@@ -32,13 +32,18 @@
                 }" ng-click="pc.plr.togglePlayPause()"></a>
                 <a class="ion-ios-rewind-outline" ng-click="pc.plr.rw()"></a>
                 <a class="ion-ios-fastforward-outline" ng-click="pc.plr.ff()"></a>
-                <a class="player-repeat"
+                <a class="playback-mod"
                     ng-class="{
-                        'ion-ios-loop': !pc.plr.repeatMode,
+                        'ion-ios-loop mod-off': !pc.plr.repeatMode,
                         'ion-ios-loop-strong': pc.plr.repeatMode === 1,
                         'ion-ios-loop-strong loop-one': pc.plr.repeatMode === 2
                     }"
                     ng-click="pc.plr.repeatMode = (pc.plr.repeatMode + 1) % 3">
+                </a>
+                <a class="playback-mod" ng-class="{
+                        'ion-ios-shuffle mod-off': !pc.plr.random,
+                        'ion-ios-shuffle-strong': pc.plr.random
+                    }" ng-click="pc.plr.random = !pc.plr.random">
                 </a>
                 <div class="playlist-mods">
                     <a class="ion-ios-paper-outline" ng-click="pc.openDialog('files')" title="Open File(s)"></a>
@@ -59,7 +64,7 @@
                 <ul as-sortable="pc.getSortListeners()" ng-model="pc.plr.playlist">
                     <li ng-repeat="item in pc.plr.playlist" 
                         ng-class="{ 
-                            'playlist-playing': $index === pc.plr.currentIndex && pc.plr.nowPlaying, 
+                            'playlist-playing': $index === pc.plr.displayIndex && pc.plr.nowPlaying, 
                             'playlist-cued': $index === pc.focusedItem 
                         }" 
                         ng-click="pc.setFocusedItem($index, $event)"
@@ -68,7 +73,7 @@
                         <div as-sortable-item-handle>
                             <span class="progress-container" 
                                 ng-click="clientSeek($event)" 
-                                ng-show="pc.plr.currentIndex === $index && pc.plr.nowPlaying">
+                                ng-show="pc.plr.displayIndex === $index && pc.plr.nowPlaying">
                                 <span class="progress-bar" ng-style="{ width: pc.plr.progressPercent + '%' }">
                                 </span>
                             </span>
