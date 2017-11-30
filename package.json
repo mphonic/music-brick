@@ -1,6 +1,6 @@
 {
-  "name": "concentric-audio",
-  "productName": "Concentric Audio",
+  "name": "onely-audio",
+  "productName": "Onely",
   "description": "Minimalist audio player",
   "version": "0.0.3",
   "private": true,
@@ -9,7 +9,7 @@
   "homepage": "https://bhobrainey.com",
   "main": "app/background.js",
   "build": {
-    "appId": "com.electron.concentric-audio",
+    "appId": "com.electron.onely-audio",
     "files": [
       "app/**/*",
       "node_modules/**/*",
