@@ -68,11 +68,10 @@ export default class PlaylistDialog {
         });
     }
 
-    openFileList(list) {
+    openFileList(list, returnPromise) {
         var arr = [];
         this.q = this.$q.defer();
         angular.forEach(list, (e, c) => {
-            console.log(e);
             if (this.isValidAudioFile(e.path)) {
                 arr.push({ path: e.path });
             }

@@ -17,10 +17,7 @@ export default function PlayerKeyMap(scope, element, attrs) {
                     break;
                 case 13:
                     if (pc.focusedItem !== plr.currentIndex) {
-                        var rand = plr.random;
-                        plr.random = false;
-                        plr.play(pc.focusedItem);
-                        plr.random = rand;
+                        plr.playNewItem(pc.focusedItem);
                     }
                     break;
                 case 39:

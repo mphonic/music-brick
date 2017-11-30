@@ -129,6 +129,13 @@ export default class Player {
         _startProgressTimer.get(this)();
     }
 
+    playNewItem(index) {
+        if (this.random) {
+            index = _randomOrder.get(this).indexOf(index);
+        }
+        this.play(index);
+    }
+
     resume() {
         this.paused = false;
         this.nowPlaying.play();

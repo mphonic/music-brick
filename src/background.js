@@ -6,7 +6,7 @@
 import path from "path";
 import url from "url";
 import fs from "fs";
-import { app, Menu, dialog } from "electron";
+import { app, Menu, dialog, ipcMain } from "electron";
 import { devMenuTemplate } from "./menu/dev_menu_template";
 import { editMenuTemplate } from "./menu/edit_menu_template";
 import createWindow from "./helpers/window";
@@ -58,6 +58,21 @@ app.on("ready", () => {
   if (env.name === "development") {
     mainWindow.openDevTools();
   }
+
+});
+
+// Windows: if process was started by opening a file in the explorer
+ipcMain.on('get-file-data', function(event) {
+  var data = null;
+  if (process.platform == 'win32' && process.argv.length >= 2) {
+    event.returnValue = process.argv[1];
+  }
+});
+
+// open file in mac
+app.on('open-url', function(event, url) {
+  event.preventDefault()
+  // broadcast url
 });
 
 app.on("window-all-closed", () => {
