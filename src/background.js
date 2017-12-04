@@ -61,19 +61,24 @@ app.on("ready", () => {
 
 });
 
-// Windows: if process was started by opening a file in the explorer
-ipcMain.on('get-file-data', function(event) {
-  var data = null;
-  if (process.platform == 'win32' && process.argv.length >= 2) {
-    event.returnValue = process.argv[1];
-  }
-});
+// handling files on open
+// let openedUrl = null;
 
-// open file in mac
-app.on('open-url', function(event, url) {
-  event.preventDefault()
-  // broadcast url
-});
+// // open file in Windows
+// if (process.platform == 'win32' && process.argv.length >= 2) {
+//   openedUrl = process.argv[1];
+// }
+
+// // open file in macOS
+// app.on('open-url', function (event, url) {
+//   event.preventDefault();
+//   openedUrl = url;
+// });
+
+// // send opened file to a requesting entity
+// ipcMain.on('opened-with-file', function (event) {
+//   event.returnValue = openedUrl;
+// });
 
 app.on("window-all-closed", () => {
   app.quit();

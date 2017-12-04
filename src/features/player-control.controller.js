@@ -1,5 +1,6 @@
 import Store from "electron-store";
 import angular from "angular";
+import { ipcRenderer } from "electron";
 import arrToBase64 from "../helpers/arrToBase64.js";
 
 const _store = new WeakMap();
@@ -12,6 +13,7 @@ const _scope = new WeakMap();
 export default class PlayerControl {
 
     constructor($scope, $window, PlaylistDialog) {
+        var loadedData;
         this.plr = $scope.player;
         this.percentFilesLoaded = 0;
         this.showPlaylistDialog = false;
@@ -32,7 +34,7 @@ export default class PlayerControl {
 
         // when files are dragged into the window
         $scope.$on('drag-received', (e, data) => {
-            this.handleDragReceived(data);
+            this.handleFileRequest(data);
         });
 
         _scope.set(this, $scope);
@@ -85,10 +87,20 @@ export default class PlayerControl {
             }
         });
 
-        // get the default playlist on load
-        this.loadPlaylist('default');
+        // see if file data appeared from OS
+        // loadedData = ipcRenderer.sendSync('opened-with-file');
+        // console.log(loadedData);
+
+        if (!loadedData || loadedData === '.') {
+            // get the default playlist on load
+            this.loadPlaylist('default');
+        } else {
+            this.handleFileRequest({ files: loadedData });
+        }
+
         // get the saved playlist names and keys
         this.savedPlaylists = this.getPlaylistKeyMap();
+        
         // and save the default playlist when the app is closed
         $window.onbeforeunload = () => { _sp.get(this)('default', 'Default'); }
     }
@@ -230,7 +242,7 @@ export default class PlayerControl {
         }
     }
 
-    handleDragReceived(data) {
+    handleFileRequest(data) {
         var promise, 
             folders = [], 
             files = [];
