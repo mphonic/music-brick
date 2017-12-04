@@ -32,7 +32,7 @@ export default angular.module('audiotron', [require('angular-animate'), assortab
       scope: {
         player: '='
       },
-      templateUrl: './features/playlist.template.html',
+      templateUrl: './views/playlist.template.html',
       controller: PlayerControl,
       controllerAs: 'pc',
       link: PlayerControlLink
