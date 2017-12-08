@@ -69,18 +69,23 @@
                         }" 
                         ng-click="pc.setFocusedItem($index, $event)"
                         ng-dblclick="pc.plr.playNewItem($index)"
+                        ng-swipe-left="showDelete = $index"
+                        ng-swipe-right="showDelete = null"
                         as-sortable-item>
-                        <div as-sortable-item-handle>
-                            <span class="progress-container" 
-                                ng-click="clientSeek($event)" 
-                                ng-show="pc.plr.playingIndex === $index && pc.plr.nowPlaying">
-                                <span class="progress-bar" ng-style="{ width: pc.plr.progressPercent + '%' }">
-                                </span>
+                        <span class="progress-container" 
+                            ng-click="clientSeek($event)" 
+                            ng-show="pc.plr.playingIndex === $index && pc.plr.nowPlaying">
+                            <span class="progress-bar" ng-style="{ width: pc.plr.progressPercent + '%' }">
                             </span>
+                        </span>
+                        <span as-sortable-item-handle>
                             <span class="track-info track-title" title="{{ item.tags.title }}">{{ item.tags.title }}</span>
-                            <span class="track-info track-album" title="{{ item.tags.album }}">{{ item.tags.album }}</span>
-                            <span class="track-info track-artist" title="{{ item.tags.artist }}">{{ item.tags.artist }}</span>
-                        </div>
+                        </span>
+                        <span class="track-info track-album" title="{{ item.tags.album }}">{{ item.tags.album }}</span>
+                        <span class="track-info track-artist" title="{{ item.tags.artist }}">{{ item.tags.artist }}</span>
+                        <a href="#" class="delete-bar" ng-if="showDelete === $index" ng-click="pc.removePlaylistItem($index)">
+                            <span class="delete-bar-text">Remove?</span>
+                        </a>
                     </li>
                 </ul>
             </div>
