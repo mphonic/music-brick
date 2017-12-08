@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --main-bg: #002b36;
   --main-text-color: #eee;
   --main-font: system-ui, sans-serif;
@@ -14,6 +14,26 @@
   --playlist-cued-bg: #268bd2;
   --playlist-cued-border-color: rgb(58, 137, 255);
   --playlist-hover-bg: #586e75;
+  --progress-bar-color: orange;
+  --progress-bar-opacity: 0.5;
+} */
+
+:root {
+  --main-bg: #000;
+  --main-text-color: #eee;
+  --main-font: system-ui, sans-serif;
+  --cover-bg: var(--main-bg);
+  --player-bg: #073642;
+  --controls-bg: #222;
+  --controls-font-color: #eee;
+  --playlist-bg: var(--controls-bg);
+  --playlist-label-bg: var(--main-bg);
+  --playlist-label-color: #999;
+  --playlist-font-color: #eee;
+  --playlist-playing-bg: var(--cover-bg);
+  --playlist-cued-bg: #5e168d;
+  --playlist-cued-border-color: rgb(161, 38, 192);
+  --playlist-hover-bg: #666;
   --progress-bar-color: orange;
   --progress-bar-opacity: 0.5;
 }
@@ -229,8 +249,8 @@ a.playback-mod {
   position: fixed;
   top: 50%;
   left: 50%;
-  font-size: 13px;
-  padding: 24px 48px;
+  font-size: 14px;
+  padding: 24px 24px;
   background: var(--main-bg);
   border: 2px solid var(--playlist-cued-bg);
   transform: translate(-50%, -50%);

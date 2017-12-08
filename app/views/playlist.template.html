@@ -120,9 +120,9 @@
             <label>Save playlist as
                 <input type="text" name="playlistName" ng-model="pc.savePlaylistAs" required autofocus />
             </label>
-            <div class="error" ng-if="pc.showPlaylistDialog && savePlaylist.playlistName.$touched && savePlaylist.playlistName.$error.required">Please enter a name</div>
+            <div class="error" ng-show="pc.showPlaylistDialog && savePlaylist.playlistName.$touched && savePlaylist.playlistName.$error.required">Please enter a name</div>
             <button ng-click="pc.savePlaylist(pc.savePlaylistAs)" ng-disabled="savePlaylist.playlistName.$error.required">Save</button>
-            <button ng-click="savePlaylist.$setPristine(); pc.showPlaylistDialog = false">Cancel</button>
+            <button ng-click="pc.showPlaylistDialog = false">Cancel</button>
         </form>
     </div>
 </div>
