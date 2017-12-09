@@ -12,7 +12,7 @@ Then type the following commands:
 
 ```
 
-git clone https://github.com/mphonic/music-brick.git
+git clone https://github.com/mphonic/onely.git
 
 cd onely
 
