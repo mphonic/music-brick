@@ -1,4 +1,4 @@
-# music-brick
+# Onely
 
 A minimalistic but fully functional, cross-platform music player developed with [Electron runtime](http://electron.atom.io) and [AngularJS](https://angularjs.org).
 
@@ -14,7 +14,7 @@ Then type the following commands:
 
 git clone https://github.com/mphonic/music-brick.git
 
-cd music-brick
+cd onely
 
 npm install
 
