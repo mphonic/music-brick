@@ -8,7 +8,7 @@ The sole development dependency of this project is [Node.js](https://nodejs.org)
 
 Then type the following commands:
 
-```
+`` `
 
 git clone https://github.com/mphonic/music-brick.git
 
@@ -22,7 +22,7 @@ npm start
 
 To build a standalone app on your platform:
 
-```
+`` `
 
 npm run release
 
@@ -34,7 +34,7 @@ This will create an installer in the dist directory.
 
 Most functions are common and self-explantory. If no playlist is loaded on start, you will be prompted to open file(s), a folder, or, if playlists exist, a playlist. Folders are not read recursively, so only valid audio files directly in the selected folder will be loaded. Once a playlist is loaded, you can add to it by selecting more files or folders using the appropriate icon or by simply dragging files or folders on to the player window.
 
-HowlerJS is the library used to play audio files, so any of its supported formats should work: 
+[HowlerJS](https://howlerjs.com/) is the library used to play audio files, so any of its supported formats should work: 
 
 * mp3 
 * mpeg 
@@ -51,7 +51,7 @@ HowlerJS is the library used to play audio files, so any of its supported format
 * dolby
 * flac
 
-Playlists can be edited by dragging on track titles, using key commands, and swiping left from the right edge to expose a "Remove" button. Original files are not affected.
+Playlists can be edited by dragging track titles, using key commands, and swiping left from the right edge to expose a "Remove" button. Original files are not affected.
 
 ### Key Commands
 
@@ -71,8 +71,8 @@ Most functions can be accomplished using the keyboard:
 
 I had two primary motivations for building this app:
 
-1. I wanted a straightforward music player that didn't try to connect me to "the cloud" or offer me advice or copy files into its own library. I wanted it to be light on CPU and memory. I wanted to store music anywhere I wanted in whatever format. I wanted to easily load music from network drives.
-2. I wanted to see what it was like to build something with Electron and AngularJS, using ES6 syntax. 
+1.  I wanted a straightforward music player that didn't try to connect me to "the cloud" or offer me advice or copy files into its own library. I wanted it to be light on CPU and memory. I wanted to store music anywhere I wanted in whatever format. I wanted to easily load music from network drives.
+2.  I wanted to see what it was like to build something with Electron and AngularJS, using ES6 syntax. 
 
 Regarding #2, I was able to build a fully-functional version of this app in about three light days without significant pain or struggle (with the help of [electron-boilerplate](https://github.com/szwacz/electron-boilerplate)). I'm pleased with the combination of these frameworks.
 
@@ -80,7 +80,7 @@ Regarding #1, this is currently my go-to music player for general listening.
 
 # Thoughts and Improvements
 
-Because the app was developed rather quickly by someone with mostly personal motivations, there are a few things that could be added / improved to make it more solid:
+Because the app was developed rather quickly by someone with mostly personal motivations, there are a few things that could be added / improved to make it less beta:
 
 *  The app is not very "defensive". For instance, if you load a playlist that references files that are no longer where they used to be, you'll experience silent failures when you try to play those files. 
 * Touch support is ok but not great. Most functions can be handled with a purely touch interface, but a) swipe gestures don't feel as responsive or reliable as they should; b) scrolling through a long playlist using touch gestures doesn't really work. Probably the best solution is to create custom directives to handle touch events, rather than using a couple different libraries (as-sortable and ng-swipe).
