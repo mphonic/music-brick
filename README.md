@@ -8,7 +8,7 @@ The sole development dependency of this project is [Node.js](https://nodejs.org)
 
 Then type the following commands:
 
-`` `
+```
 
 git clone https://github.com/mphonic/music-brick.git
 
@@ -18,15 +18,15 @@ npm install
 
 npm start
 
-`` `
+```
 
 To build a standalone app on your platform:
 
-`` `
+```
 
 npm run release
 
-`` `
+```
 
 This will create an installer in the dist directory.
 
