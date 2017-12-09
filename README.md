@@ -58,14 +58,15 @@ Playlists can be edited by dragging track titles, using key commands, and swipin
 Most functions can be accomplished using the keyboard:
 
 * Space bar: toggle play / pause
-* Arrow Up/Down: select next / previous item in playlist
-* Arrow Left/Right: skip forwards / backwards
+* Arrow Up / Down: select next / previous item in playlist
+* Arrow Left / Right: skip forwards / backwards
 * Enter: play selected track
 * Backspace / Del: remove selected track from playlist
 * s: open save playlist dialog
 * p: toggle playlist menu
 * f: open file menu
 * d: open folder menu
+* c: clear playlist
 
 # Motivations
 
