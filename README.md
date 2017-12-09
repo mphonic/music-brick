@@ -2,6 +2,8 @@
 
 A minimalistic but fully functional, cross-platform music player developed with [Electron runtime](http://electron.atom.io) and [AngularJS](https://angularjs.org).
 
+![Screen Shot](./screen-shot.png?raw=true "Screen Shot")
+
 # Quick start
 
 The sole development dependency of this project is [Node.js](https://nodejs.org), so make sure you have it installed.
