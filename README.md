@@ -77,9 +77,7 @@ I had two primary motivations for building this app:
 1.   I wanted a straightforward music player that didn't try to connect me to "the cloud" or offer me advice or copy files into its own library. I wanted it to be light on CPU and memory. I wanted to store music anywhere I wanted in whatever format. I wanted to easily load music from network drives.
 2.   I wanted to see what it was like to build something with Electron and AngularJS, using ES6 syntax. 
 
-Regarding #2, I was able to build a fully-functional version of this app in about three light days without significant pain or struggle (with the help of [electron-boilerplate](https://github.com/szwacz/electron-boilerplate)). I'm pleased with the combination of these frameworks.
-
-Regarding #1, this is currently my go-to music player for general listening.
+The development process was fast and painless (with the help of [electron-boilerplate](https://github.com/szwacz/electron-boilerplate)), and now this is currently my go-to music player for general listening.
 
 # Thoughts and Improvements
 
