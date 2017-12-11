@@ -79,6 +79,8 @@ I had two primary motivations for building this app:
 
 The development process was fast and painless (with the help of [electron-boilerplate](https://github.com/szwacz/electron-boilerplate)), and now this is currently my go-to music player for general listening.
 
+Much could be said about code style with Angular, ES6, and Webpack. There is already [a good introduction](http://angular-tips.com/blog/2015/06/using-angular-1-dot-x-with-es6-and-webpack/), and I have some thoughts about private members and WeakMap, given the connection in Angular between views and controllers (as in, perhaps we want to be more strict about limiting what the view can access, which we can do with WeakMaps, but which makes our syntactical sugar slightly less pretty). More on that elsewhere.
+
 # Thoughts and Improvements
 
 Because the app was developed rather quickly by someone with mostly personal motivations, there are a few things that could be added / improved to make it less beta:
