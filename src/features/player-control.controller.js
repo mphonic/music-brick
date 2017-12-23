@@ -5,9 +5,9 @@ import arrToBase64 from "../helpers/arrToBase64.js";
 
 const _store = new WeakMap();
 
-const _pd = new WeakMap();
+const _playlistDialog = new WeakMap();
 const _handleLoadPromise = new WeakMap();
-const _sp = new WeakMap();
+const _savePlaylist = new WeakMap();
 const _scope = new WeakMap();
 
 export default class PlayerControl {
@@ -39,7 +39,7 @@ export default class PlayerControl {
 
         _scope.set(this, $scope);
 
-        _pd.set(this, PlaylistDialog);
+        _playlistDialog.set(this, PlaylistDialog);
 
         _handleLoadPromise.set(this, (promise) => {
             promise.then((list) => {
@@ -75,7 +75,7 @@ export default class PlayerControl {
 
         _store.set(this, new Store());
         // function to save a playlist based on a "sanitized" key
-        _sp.set(this, (key, name) => {
+        _savePlaylist.set(this, (key, name) => {
             if(key) {
                 var pl = angular.copy(this.plr.playlist);
                 // clear out any howls so that the object can be serialized
@@ -102,7 +102,7 @@ export default class PlayerControl {
         this.savedPlaylists = this.getPlaylistKeyMap();
         
         // and save the default playlist when the app is closed
-        $window.onbeforeunload = () => { _sp.get(this)('default', 'Default'); }
+        $window.onbeforeunload = () => { _savePlaylist.get(this)('default', 'Default'); }
     }
 
     loadPlaylist(key) {
@@ -157,7 +157,7 @@ export default class PlayerControl {
             key = key + Date.now() + Math.round(Math.random() * 1000);
         }
         if (doIt) {
-            _sp.get(this)(key, name);
+            _savePlaylist.get(this)(key, name);
             this.showPlaylistDialog = false;
             this.playlistName = name;
             this.savedPlaylists = this.getPlaylistKeyMap();
@@ -248,20 +248,20 @@ export default class PlayerControl {
             files = [];
         angular.forEach(data.files, (e, c) => {
             if (!e.type) {
-                promise = _pd.get(this).loadFolderContent(e.path, true);
+                promise = _playlistDialog.get(this).loadFolderContent(e.path, true);
                 _handleLoadPromise.get(this)(promise);
             } else {
                 files.push(e);
             }
         });
         if (files.length) {
-            promise = _pd.get(this).openFileList(files);
+            promise = _playlistDialog.get(this).openFileList(files);
             _handleLoadPromise.get(this)(promise);
         }
     }
 
     openDialog(type) {
-        var promise = _pd.get(this).initiateFileDialog(type);
+        var promise = _playlistDialog.get(this).initiateFileDialog(type);
         _handleLoadPromise.get(this)(promise);
     }
 }
