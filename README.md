@@ -1,6 +1,6 @@
-# Onely
+ # Onely
 
-A minimalistic but fully functional, cross-platform music player developed with [Electron runtime](http://electron.atom.io) and [AngularJS](https://angularjs.org).
+A minimalistic but fully functional, cross-platform music player developed with [Electron runtime](http://electron.atom.io) and [AngularJS](https://angularjs.org). Note: Visual Studio users might want to check out a more robust, [Universal Windows Platform version of this app](https://github.com/mphonic/onely-uwp).
 
 ![Screen Shot](./screen-shot.png?raw=true "Screen Shot")
 
